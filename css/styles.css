@@ -1573,28 +1573,23 @@ body, button, a, .nav-item, .nav-prev, .nav-next, .method-step,
 
 
 
+
 .rail-brand .abbr-expand {
   cursor: help;
-}
-.rail-brand .abbr-expand .abbr {
   position: relative;
+  min-height: 1.1em;
 }
-.rail-brand .abbr-expand:hover .abbr,
-.rail-brand .abbr-expand:focus-within .abbr {
-  font-size: 0;
+.rail-brand .abbr-expand .abbr-full {
+  display: none;
 }
-.rail-brand .abbr-expand:hover .abbr::after,
-.rail-brand .abbr-expand:focus-within .abbr::after {
-  content: attr(data-full);
-  font-size: 0.62rem;
-  letter-spacing: 0.01em;
-  color: var(--muted);
+.rail-brand .abbr-expand:hover .abbr-short,
+.rail-brand .abbr-expand:focus .abbr-short,
+.rail-brand .abbr-expand:focus-within .abbr-short {
+  display: none;
 }
-body.mode-practical .rail-brand .abbr-expand:hover .abbr::after,
-body.mode-practical .rail-brand .abbr-expand:focus-within .abbr::after {
-  color: #b8d4c8;
-}
-.rail-brand .abbr-expand:hover .dot,
-.rail-brand .abbr-expand:focus-within .dot {
-  margin: 0 0.15em;
+.rail-brand .abbr-expand:hover .abbr-full,
+.rail-brand .abbr-expand:focus .abbr-full,
+.rail-brand .abbr-expand:focus-within .abbr-full {
+  display: inline;
+  color: #c5ddd4;
 }
