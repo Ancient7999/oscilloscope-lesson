@@ -815,6 +815,7 @@
   const mcqList = document.getElementById('mcq-list');
   const mcqProgress = document.getElementById('mcq-progress');
   const mcqResetBtn = document.getElementById('mcq-reset');
+  let mcqRaw = [];
   let mcqBank = [];
   let mcqAnswers = [];
   const MCQ_KEYS = ['A', 'B', 'C', 'D'];
@@ -823,6 +824,37 @@
     return String(s == null ? '' : s)
       .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
       .replace(/"/g, '&quot;');
+  }
+
+
+  function shuffleInPlace(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const tmp = arr[i];
+      arr[i] = arr[j];
+      arr[j] = tmp;
+    }
+    return arr;
+  }
+
+  function prepareMcqBank(raw) {
+    const sorted = raw.slice().sort((a, b) => {
+      const na = parseInt(String(a.id || '').replace(/\D/g, ''), 10) || 0;
+      const nb = parseInt(String(b.id || '').replace(/\D/g, ''), 10) || 0;
+      return na - nb;
+    });
+    return sorted.map(q => {
+      const opts = (q.options || []).map((text, i) => ({ text, i }));
+      shuffleInPlace(opts);
+      return {
+        id: q.id,
+        cat: q.cat,
+        q: q.q,
+        explain: q.explain,
+        options: opts.map(o => o.text),
+        correct: opts.findIndex(o => o.i === q.correct)
+      };
+    });
   }
 
   function updateMcqProgress() {
@@ -847,8 +879,7 @@
       const locked = answered != null;
       card.innerHTML =
         '<div class="mcq-card-top">' +
-          '<span class="mcq-id">' + escapeHtml(q.id || ('Q' + (qi + 1))) + '</span>' +
-          '<span class="mcq-cat">' + escapeHtml(q.cat || 'mcq') + '</span>' +
+          '<span class="mcq-num">' + (qi + 1) + '</span>' +
         '</div>' +
         '<div class="mcq-q">' + escapeHtml(q.q) + '</div>' +
         '<div class="mcq-options"></div>' +
@@ -912,6 +943,7 @@
   }
 
   function resetMcqAnswers() {
+    mcqBank = prepareMcqBank(mcqRaw);
     mcqAnswers = new Array(mcqBank.length).fill(null);
     renderMcqList();
   }
@@ -925,7 +957,8 @@
     })
     .then(data => {
       const form = (data.forms && data.forms[0]) || 'A';
-      mcqBank = (data.bank && data.bank[form]) ? data.bank[form].slice() : [];
+      mcqRaw = (data.bank && data.bank[form]) ? data.bank[form].slice() : [];
+      mcqBank = prepareMcqBank(mcqRaw);
       mcqAnswers = new Array(mcqBank.length).fill(null);
       renderMcqList();
     })

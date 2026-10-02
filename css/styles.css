@@ -1298,6 +1298,11 @@ body.mode-practical .med-points li strong {
   flex-wrap: wrap;
   margin-bottom: 10px;
 }
+.mcq-num {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--muted);
+}
 .mcq-id {
   font-family: var(--mono);
   font-size: 0.72rem;
