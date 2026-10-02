@@ -3,7 +3,7 @@
   "subject": "Medical Physics and Instrumentation",
   "subjectId": "medical_physics_oscilloscope",
   "title": "Oscilloscope Lab MCQ Bank",
-  "formSize": 28,
+  "formSize": 19,
   "forms": [
     "A"
   ],
@@ -50,90 +50,6 @@
         ],
         "correct": 2,
         "explain": "Time per division controls the horizontal sweep rate. A stable trace requires the sweep frequency to match the input signal frequency. This adjustment does not raise signal amplitude, does not change volts per division, and does not convert the trace into digital samples."
-      },
-      {
-        "id": "OSC004",
-        "type": "mcq",
-        "cat": "osc_general_principles",
-        "q": "Which statement correctly identifies bandwidth?",
-        "options": [
-          "The rise time marks the ten to ninety percent interval.",
-          "The sampling rate sets the analog to digital conversion speed.",
-          "The input impedance limits loading on the measured circuit.",
-          "The bandwidth marks the minus three decibel frequency point."
-        ],
-        "correct": 3,
-        "explain": "Bandwidth is the frequency where the response falls to the minus three decibel point, about 70.7 percent of the low-frequency amplitude. Rise time describes edge transition speed. Sampling rate describes digitization speed. Input impedance describes circuit loading."
-      },
-      {
-        "id": "OSC005",
-        "type": "mcq",
-        "cat": "osc_general_principles",
-        "q": "What does the Nyquist criterion require for faithful digital reconstruction?",
-        "options": [
-          "The sample rate must exceed twice the highest signal frequency.",
-          "The sample rate must match the display refresh cycle exactly.",
-          "The analog bandwidth must stay below the fundamental signal frequency.",
-          "The input impedance must exceed the source output resistance greatly."
-        ],
-        "correct": 0,
-        "explain": "The Nyquist criterion requires a sample rate above twice the highest signal frequency to prevent aliasing. Display refresh affects viewing, not waveform reconstruction. Keeping analog bandwidth below the signal frequency would remove needed content. Input impedance concerns loading, not the sampling theorem."
-      },
-      {
-        "id": "OSC006",
-        "type": "mcq",
-        "cat": "osc_general_principles",
-        "q": "Which mode plots one input channel against another instead of against time?",
-        "options": [
-          "The alternate mode switches channels after each horizontal sweep.",
-          "The X-Y mode uses one channel to drive horizontal deflection.",
-          "The chopped mode interleaves two traces during a single sweep.",
-          "The persistence mode overlays repeated acquisitions on screen."
-        ],
-        "correct": 1,
-        "explain": "X-Y mode applies one channel to horizontal deflection and another to vertical deflection, producing a signal-versus-signal display. Alternate mode switches channels between sweeps. Chopped mode interleaves traces within a sweep. Persistence mode overlays repeated time-based acquisitions."
-      },
-      {
-        "id": "OSC007",
-        "type": "mcq",
-        "cat": "osc_instrument_types",
-        "q": "Which instrument combines analog waveform channels with digital logic channels?",
-        "options": [
-          "A handheld oscilloscope packs controls into a portable case.",
-          "A PC-based oscilloscope sends captured data to a host computer.",
-          "A mixed-signal oscilloscope adds digital logic analyzer channels.",
-          "An analog storage oscilloscope retains traces on a CRT target."
-        ],
-        "correct": 2,
-        "explain": "A mixed-signal oscilloscope combines analog input channels with digital logic channels for synchronized debugging. A handheld instrument emphasizes portability. A PC-based instrument relies on a host computer. An analog storage instrument retains CRT traces but does not add logic channels."
-      },
-      {
-        "id": "OSC008",
-        "type": "mcq",
-        "cat": "osc_instrument_types",
-        "q": "What is a defining feature of a digital storage oscilloscope?",
-        "options": [
-          "It uses two electron guns for independent beam display.",
-          "It relies on phosphor afterglow for visual persistence.",
-          "It bypasses analog to digital conversion during capture.",
-          "It stores sampled waveforms in memory for later recall."
-        ],
-        "correct": 3,
-        "explain": "A digital storage oscilloscope digitizes the input signal and stores samples in memory for recall, measurement, and post-acquisition analysis. Two electron guns describe a dual-beam analog design. Phosphor afterglow describes analog persistence. Bypassing analog-to-digital conversion contradicts digital acquisition."
-      },
-      {
-        "id": "OSC009",
-        "type": "mcq",
-        "cat": "osc_instrument_types",
-        "q": "Which oscilloscope type is built for field work with battery power and rugged construction?",
-        "options": [
-          "A handheld unit with battery operation and rugged casing.",
-          "A mixed-domain unit with spectrum analysis input.",
-          "A digital sampling unit for repetitive high frequency waves.",
-          "A PC-based unit with an external acquisition module."
-        ],
-        "correct": 0,
-        "explain": "Handheld oscilloscopes are battery powered and built for portable field diagnostics. Mixed-domain instruments add spectrum analysis. Digital sampling instruments target repetitive high-frequency reconstruction. PC-based instruments depend on an external host computer."
       },
       {
         "id": "OSC010",
@@ -220,20 +136,6 @@
         "explain": "Volts/div is the vertical scale: each vertical square equals that many volts. Time/div sets the horizontal scale. Trigger level starts the sweep. Intensity sets brightness."
       },
       {
-        "id": "OSC016",
-        "type": "mcq",
-        "cat": "cro_basics",
-        "q": "What does the time per division control set?",
-        "options": [
-          "How much time each horizontal graticule square represents",
-          "How many volts each vertical graticule square represents",
-          "The focus sharpness of the electron beam spot",
-          "The output amplitude of the function generator"
-        ],
-        "correct": 0,
-        "explain": "Time/div is the horizontal time base. Vertical volts/div sets voltage scale. Focus sharpens the beam. Function-generator amplitude is set on the generator, not by time/div."
-      },
-      {
         "id": "OSC017",
         "type": "mcq",
         "cat": "osc_lab_procedure",
@@ -248,34 +150,6 @@
         "explain": "By definition A = Vpp / 2. Doubling, taking the reciprocal, or multiplying by time/div does not give amplitude."
       },
       {
-        "id": "OSC018",
-        "type": "mcq",
-        "cat": "osc_lab_procedure",
-        "q": "How is the time period T of one cycle calculated from the screen?",
-        "options": [
-          "Horizontal divisions for one cycle multiplied by time per division",
-          "Vertical divisions peak-to-peak multiplied by volts per division",
-          "The reciprocal of the horizontal division count alone",
-          "Volts per division divided by the measured vertical height"
-        ],
-        "correct": 0,
-        "explain": "T = X \u00d7 (time/div), where X is the horizontal span of one full cycle. Vertical counts give voltage, not period. Frequency is 1/T, not 1/X alone."
-      },
-      {
-        "id": "OSC019",
-        "type": "mcq",
-        "cat": "osc_lab_procedure",
-        "q": "How is frequency f related to the time period T?",
-        "options": [
-          "Frequency equals the reciprocal of the period: f = 1 / T",
-          "Frequency equals the period multiplied by volts per division",
-          "Frequency equals twice the period in milliseconds",
-          "Frequency equals the horizontal division count alone"
-        ],
-        "correct": 0,
-        "explain": "f = 1/T with T in seconds (convert ms to s first). Multiplying by volts/div, doubling the period, or using only X does not give frequency."
-      },
-      {
         "id": "OSC020",
         "type": "mcq",
         "cat": "osc_lab_procedure",
@@ -287,7 +161,7 @@
           "5.0 V peak-to-peak"
         ],
         "correct": 0,
-        "explain": "Vpp = Y \u00d7 volts/div = 3.0 \u00d7 2 = 6.0 V. Amplitude would then be A = 6.0 / 2 = 3.0 V."
+        "explain": "Vpp = Y × volts/div = 3.0 × 2 = 6.0 V. Amplitude would then be A = 6.0 / 2 = 3.0 V."
       },
       {
         "id": "OSC021",
@@ -301,7 +175,7 @@
           "T = 8.0 ms and f = 125 Hz"
         ],
         "correct": 0,
-        "explain": "T = 4.0 \u00d7 1 ms = 4.0 ms = 0.004 s. Then f = 1 / 0.004 = 250 Hz."
+        "explain": "T = 4.0 × 1 ms = 4.0 ms = 0.004 s. Then f = 1 / 0.004 = 250 Hz."
       },
       {
         "id": "OSC022",
@@ -371,7 +245,7 @@
           "They ignore amplitude and report only average room temperature"
         ],
         "correct": 0,
-        "explain": "ECG, EEG, and EMG monitors present amplified bioelectric signals on a voltage\u2013time display. Counting amplitude and timing on that graph is the same skill practised on the lab CRO."
+        "explain": "ECG, EEG, and EMG monitors present amplified bioelectric signals on a voltage–time display. Counting amplitude and timing on that graph is the same skill practised on the lab CRO."
       },
       {
         "id": "OSC027",
@@ -379,10 +253,10 @@
         "cat": "cro_basics",
         "q": "What is the bright moving line on the CRO screen called?",
         "options": [
-          "The trace \u2014 the waveform drawn by the electron beam",
-          "The graticule \u2014 the etched or printed measuring grid",
-          "The trigger \u2014 the level that starts each horizontal sweep",
-          "The probe \u2014 the cable tip that contacts the circuit"
+          "The trace — the waveform drawn by the electron beam",
+          "The graticule — the etched or printed measuring grid",
+          "The trigger — the level that starts each horizontal sweep",
+          "The probe — the cable tip that contacts the circuit"
         ],
         "correct": 0,
         "explain": "The bright line is the trace (waveform). The graticule is the grid. Trigger starts the sweep. The probe is the input tip/cable."
