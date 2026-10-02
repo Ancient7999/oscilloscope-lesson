@@ -1574,22 +1574,34 @@ body, button, a, .nav-item, .nav-prev, .nav-next, .method-step,
 
 
 
-.rail-brand .abbr-expand {
-  cursor: help;
+
+.rail-brand .sub.tip {
   position: relative;
-  min-height: 1.1em;
+  cursor: help;
+  width: fit-content;
 }
-.rail-brand .abbr-expand .abbr-full {
-  display: none;
+.rail-brand .sub.tip::after {
+  content: attr(data-tip);
+  position: absolute;
+  left: 0;
+  bottom: calc(100% + 8px);
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: rgba(12, 18, 22, 0.95);
+  color: #e6f7f2;
+  font-size: 0.68rem;
+  line-height: 1.35;
+  white-space: nowrap;
+  border: 1px solid rgba(126,200,168,0.35);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(4px);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  z-index: 20;
 }
-.rail-brand .abbr-expand:hover .abbr-short,
-.rail-brand .abbr-expand:focus .abbr-short,
-.rail-brand .abbr-expand:focus-within .abbr-short {
-  display: none;
-}
-.rail-brand .abbr-expand:hover .abbr-full,
-.rail-brand .abbr-expand:focus .abbr-full,
-.rail-brand .abbr-expand:focus-within .abbr-full {
-  display: inline;
-  color: #c5ddd4;
+.rail-brand .sub.tip:hover::after,
+.rail-brand .sub.tip:focus::after {
+  opacity: 1;
+  transform: translateY(0);
 }
