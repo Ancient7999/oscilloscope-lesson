@@ -235,7 +235,13 @@
   const METHOD_STEPS = [
     { img: 'assets/step-01.png', cap: 'Power on the CRO and wait for a stable horizontal trace.' },
     { img: 'assets/step-02.png', cap: 'Route the function-generator output into a CRO channel (e.g. CH1).' },
-    { img: 'assets/step-03.png', cap: 'Trim Intensity, then Focus, until the line is bright and sharp.' },
+    {
+      img: 'assets/step-03-before.png',
+      imgB: 'assets/step-03-after.png',
+      labelA: 'Before',
+      labelB: 'After',
+      cap: 'Trim Intensity, then Focus, until the line is bright and sharp. Left: dim blurry trace. Right: bright sharp sine after intensity & focus.'
+    },
     { img: 'assets/step-04.png', cap: 'Pick a triangular wave and set volts/div so the wave fills the screen cleanly.' },
     { img: 'assets/step-05.png', cap: 'Set time/div until the sweep locks and the wave stands still.' },
     { img: 'assets/step-06.png', cap: 'Count Y (peak-to-peak divisions). Vpp = Y × volts/div; A = Vpp / 2.' },
@@ -245,7 +251,12 @@
 
   const methodSplit = document.getElementById('method-split');
   const methodPanel = document.getElementById('method-panel');
+  const methodImgs = document.getElementById('method-imgs');
   const methodImg = document.getElementById('method-img');
+  const methodImgB = document.getElementById('method-img-b');
+  const methodShotB = document.getElementById('method-shot-b');
+  const methodLabelA = document.getElementById('method-label-a');
+  const methodLabelB = document.getElementById('method-label-b');
   const methodCap = document.getElementById('method-cap');
 
   document.querySelectorAll('.method-step').forEach(btn => {
@@ -258,6 +269,31 @@
       methodSplit.classList.add('open');
       methodImg.src = step.img;
       methodImg.alt = step.cap;
+      const isPair = Boolean(step.imgB);
+      if (methodImgs) methodImgs.classList.toggle('pair', isPair);
+      if (methodShotB) methodShotB.hidden = !isPair;
+      if (isPair) {
+        methodImgB.src = step.imgB;
+        methodImgB.alt = step.labelB ? (step.labelB + ' — ' + step.cap) : step.cap;
+        if (methodLabelA) {
+          methodLabelA.hidden = false;
+          methodLabelA.textContent = step.labelA || 'Before';
+        }
+        if (methodLabelB) {
+          methodLabelB.hidden = false;
+          methodLabelB.textContent = step.labelB || 'After';
+        }
+      } else {
+        if (methodImgB) methodImgB.removeAttribute('src');
+        if (methodLabelA) {
+          methodLabelA.hidden = true;
+          methodLabelA.textContent = '';
+        }
+        if (methodLabelB) {
+          methodLabelB.hidden = true;
+          methodLabelB.textContent = '';
+        }
+      }
       methodCap.textContent = step.cap;
     });
   });
