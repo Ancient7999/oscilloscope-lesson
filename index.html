@@ -10,7 +10,7 @@
   onload="if(window.renderMathInElement)renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});"></script>
 <link rel="stylesheet" href="css/styles.css">
 </head>
-<body>
+<body class="mode-practical">
 <canvas id="fxCanvas" aria-hidden="true"></canvas>
 
 <div class="app">
@@ -261,10 +261,10 @@
         </div>
       </section>
 
-      <!-- FORMULAS -->
+      <!-- FORMULAS + RESULTS (merged) -->
       <section class="view" id="view-formulas">
         <div class="card">
-          <h2>Observation · Formulas</h2>
+          <h2>Formulas &amp; results</h2>
           <div class="formula-block static">
             <div class="fname">1. Amplitude (A)</div>
             <p>Peak-to-peak from the vertical scale:</p>
@@ -282,37 +282,37 @@
             $$f = \frac{1}{T}\ \text{Hz}$$
             <p class="formula-note">Units follow the time-base: Hz, kHz, or MHz as appropriate.</p>
           </div>
-          <p class="airy">
-            Worked check: $Y = 3.0$ div at $2$&nbsp;V/div → $V_{PP} = 6.0$&nbsp;V, $A = 3.0$&nbsp;V.
-            $X = 4.0$ div at $1$&nbsp;ms/div → $T = 4.0$&nbsp;ms $= 0.004$&nbsp;s, $f = 250$&nbsp;Hz.
-          </p>
-          <div class="page-end">
-            <button type="button" class="nav-next" data-next>Next →</button>
-          </div>
-        </div>
-      </section>
 
-      <!-- RESULTS -->
-      <section class="view" id="view-results">
-        <div class="card">
-          <h2>Result</h2>
-          <ul class="result-list">
+          <h3>Worked result (matches Trace)</h3>
+          <p class="airy">
+            Same scale as the Trace page and Practical screen:
+            volts/div $= 2$&nbsp;V/div · time/div $= 1$&nbsp;ms/div ·
+            $Y = 3.0$ div · $X = 4.0$ div.
+          </p>
+          <ul class="result-list filled">
+            <li>
+              <span>Peak-to-peak</span>
+              <span>$V_{PP} =$</span>
+              <span class="result-val">6.0</span>
+              <span>volt</span>
+            </li>
             <li>
               <span>Amplitude of the given waveform</span>
               <span>$A =$</span>
-              <span class="blank">&nbsp;</span>
+              <span class="result-val">3.0</span>
               <span>volt</span>
             </li>
             <li>
               <span>Time period of the given waveform</span>
               <span>$T =$</span>
-              <span class="blank">&nbsp;</span>
+              <span class="result-val">0.004</span>
               <span>second</span>
+              <span class="result-note">(= 4.0 ms)</span>
             </li>
             <li>
               <span>Frequency of the given waveform</span>
               <span>$f =$</span>
-              <span class="blank">&nbsp;</span>
+              <span class="result-val">250</span>
               <span>hertz</span>
             </li>
           </ul>
@@ -330,12 +330,8 @@
         <div class="card card-wide">
           <h2>Trace waveforms</h2>
           <p class="lede">
-            Represent data graphically. Toggle the example traces on the lab graph paper.
+            Represent data graphically. Example traces are shown on the lab graph paper.
           </p>
-          <div class="chart-toggle">
-            <button type="button" id="btn-hand-on" aria-pressed="true">Show example traces</button>
-            <button type="button" id="btn-hand-off" aria-pressed="false">Blank paper only</button>
-          </div>
           <div class="chart-wrap">
             <div class="chart-canvas" id="chart-canvas">
               <img class="paper" src="assets/graph-paper.png" alt="Blank laboratory graph paper" width="803" height="1141" loading="lazy">
@@ -575,9 +571,15 @@
                   <span class="unit">Hz</span>
                 </div>
               </div>
+              <div class="guide-box" id="guide-box">
+                <div class="guide-label">Guided calc</div>
+                <div class="guide-beat" id="guide-beat" aria-live="polite">
+                  We will read the chart together — Y, X, volts/div, time/div — then walk each formula one beat at a time.
+                </div>
+              </div>
               <div class="calc-actions">
                 <button type="button" class="check" id="btn-check">Check</button>
-                <button type="button" id="btn-reveal">Show values</button>
+                <button type="button" class="guide" id="btn-guide">Start guided calc</button>
               </div>
               <div class="calc-feedback" id="fb-calc" role="status" aria-live="polite"></div>
             </div>

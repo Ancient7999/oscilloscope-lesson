@@ -24,10 +24,9 @@
   /* —— FX canvas —— */
   const canvas = document.getElementById('fxCanvas');
   const ctx = canvas.getContext('2d');
-  let W, H, practicalMode = false, t0 = performance.now();
-  const wells = [], specks = [];
+  let W, H, t0 = performance.now();
   const beams = [], phosphor = [];
-  const paletteStudy = ['#3d5a80', '#5c7a9e', '#c4a574', '#8aa0b4', '#d4a07a'];
+  // Practical colorful live theme is the site-wide default.
 
   function resize() {
     W = canvas.width = window.innerWidth;
@@ -36,30 +35,6 @@
   window.addEventListener('resize', resize);
   resize();
 
-  function seedStudy() {
-    wells.length = 0;
-    specks.length = 0;
-    for (let i = 0; i < 11; i++) {
-      wells.push({
-        x: Math.random() * W, y: Math.random() * H,
-        r: 16 + Math.random() * 42,
-        a: 0.035 + Math.random() * 0.07,
-        color: paletteStudy[Math.floor(Math.random() * paletteStudy.length)],
-        pulse: Math.random() * Math.PI * 2,
-        drift: (Math.random() - 0.5) * 0.07
-      });
-    }
-    for (let i = 0; i < 32; i++) {
-      specks.push({
-        x: Math.random() * W, y: Math.random() * H,
-        r: 1 + Math.random() * 2.2,
-        vx: (Math.random() - 0.5) * 0.11,
-        vy: (Math.random() - 0.5) * 0.09,
-        a: 0.1 + Math.random() * 0.22,
-        color: paletteStudy[Math.floor(Math.random() * paletteStudy.length)]
-      });
-    }
-  }
 
   function seedPractical() {
     beams.length = 0;
@@ -88,39 +63,7 @@
     }
   }
 
-  function seedParticles() {
-    if (practicalMode) seedPractical();
-    else seedStudy();
-  }
-  seedParticles();
-
-  function drawStudy() {
-    const g = ctx.createRadialGradient(W * 0.25, H * 0.08, 0, W * 0.5, H * 0.6, Math.max(W, H) * 0.85);
-    g.addColorStop(0, 'rgba(255,255,255,0.28)');
-    g.addColorStop(1, 'rgba(235,232,225,0.08)');
-    ctx.fillStyle = g;
-    ctx.fillRect(0, 0, W, H);
-    wells.forEach(w => {
-      w.x += w.drift; w.pulse += 0.01;
-      if (w.x < -60) w.x = W + 60;
-      if (w.x > W + 60) w.x = -60;
-      ctx.beginPath();
-      ctx.arc(w.x, w.y, w.r * (0.88 + 0.12 * Math.sin(w.pulse)), 0, Math.PI * 2);
-      ctx.fillStyle = w.color;
-      ctx.globalAlpha = w.a * (0.7 + 0.3 * Math.sin(w.pulse));
-      ctx.fill();
-    });
-    specks.forEach(s => {
-      s.x += s.vx; s.y += s.vy;
-      if (s.x < -10) s.x = W + 10; if (s.x > W + 10) s.x = -10;
-      if (s.y < -10) s.y = H + 10; if (s.y > H + 10) s.y = -10;
-      ctx.beginPath();
-      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-      ctx.fillStyle = s.color;
-      ctx.globalAlpha = s.a;
-      ctx.fill();
-    });
-  }
+  seedPractical();
 
   function drawPractical(now) {
     const g = ctx.createRadialGradient(W * 0.5, H * 0.35, 0, W * 0.5, H * 0.55, Math.max(W, H) * 0.9);
@@ -199,8 +142,7 @@
   function drawFx(ts) {
     const now = ts || performance.now();
     ctx.clearRect(0, 0, W, H);
-    if (practicalMode) drawPractical(now);
-    else drawStudy();
+    drawPractical(now);
     ctx.globalAlpha = 1;
     requestAnimationFrame(drawFx);
   }
@@ -212,10 +154,9 @@
     { id: 'basics', label: 'What is a CRO?' },
     { id: 'medical', label: 'Medical' },
     { id: 'method', label: 'Method' },
-    { id: 'formulas', label: 'Formulas' },
-    { id: 'results', label: 'Results' },
+    { id: 'formulas', label: 'Formulas & results' },
     { id: 'trace', label: 'Trace' },
-    { id: 'practical', label: 'Practical', practical: true }
+    { id: 'practical', label: 'Practical' }
   ];
 
   const nav = document.getElementById('nav');
@@ -249,13 +190,7 @@
     progressFill.style.width = Math.round(((i + 1) / VIEWS.length) * 100) + '%';
     whereEl.textContent = VIEWS[i].label;
     btnPrev.disabled = i === 0;
-
-    const isPrac = !!VIEWS[i].practical;
-    if (isPrac !== practicalMode) {
-      practicalMode = isPrac;
-      document.body.classList.toggle('mode-practical', isPrac);
-      seedParticles();
-    }
+    document.body.classList.add('mode-practical');
 
     if (pushHash !== false) history.replaceState(null, '', '#' + VIEWS[i].id);
     tryRenderMath();
@@ -282,7 +217,8 @@
   });
 
   function hashToIndex() {
-    const h = (location.hash || '#aim').replace('#', '');
+    let h = (location.hash || '#aim').replace('#', '');
+    if (h === 'results') h = 'formulas'; // merged into Formulas & results
     const idx = VIEWS.findIndex(v => v.id === h);
     return idx >= 0 ? idx : 0;
   }
@@ -637,7 +573,7 @@
     });
   }
 
-  /* Answer checking */
+  /* Answer checking + guided explain (one beat at a time) */
   const answers = {
     vpp: { value: 6, tol: 0.15 },
     a: { value: 3, tol: 0.15 },
@@ -652,6 +588,7 @@
     Object.keys(answers).forEach(key => {
       total++;
       const field = document.querySelector('.calc-field[data-key="' + key + '"]');
+      if (!field) return;
       const input = field.querySelector('input');
       let v = parseFloat(input.value);
       let good = near(v, answers[key].value, answers[key].tol);
@@ -661,6 +598,7 @@
       if (good) ok++;
     });
     const fb = document.getElementById('fb-calc');
+    if (!fb) return;
     if (ok === total) {
       fb.className = 'calc-feedback ok';
       fb.textContent = 'Match · Vpp = 6 V, A = 3 V, T = 4 ms, f = 250 Hz.';
@@ -670,15 +608,7 @@
     }
   }
   const btnCheck = document.getElementById('btn-check');
-  const btnReveal = document.getElementById('btn-reveal');
   if (btnCheck) btnCheck.addEventListener('click', check);
-  if (btnReveal) btnReveal.addEventListener('click', () => {
-    document.getElementById('in-vpp').value = '6';
-    document.getElementById('in-a').value = '3';
-    document.getElementById('in-tms').value = '4';
-    document.getElementById('in-f').value = '250';
-    check();
-  });
   document.querySelectorAll('#calc-panel input').forEach(inp => {
     inp.addEventListener('change', () => {
       const filled = [...document.querySelectorAll('#calc-panel input')].filter(i => i.value !== '').length;
@@ -686,18 +616,126 @@
     });
   });
 
-  /* Chart handwriting toggle */
-  const chartCanvas = document.getElementById('chart-canvas');
-  const btnOn = document.getElementById('btn-hand-on');
-  const btnOff = document.getElementById('btn-hand-off');
-  function setHand(show) {
-    if (!chartCanvas) return;
-    chartCanvas.classList.toggle('hand-hidden', !show);
-    btnOn.setAttribute('aria-pressed', show ? 'true' : 'false');
-    btnOff.setAttribute('aria-pressed', show ? 'false' : 'true');
+  /* Guided calc — teaching narration, advance when ready */
+  const GUIDE_BEATS = [
+    {
+      text: 'First, read these numbers from the chart: Y (peak-to-peak divisions), X (one-period divisions), volts/div, and time/div.',
+      teach: null, marks: ['ydiv', 'xdiv', 'vdiv', 'tdiv'], plug: null, fill: null, field: null
+    },
+    {
+      text: 'Here: Y = 3.0 div, X = 4.0 div, volts/div = 2 V/div, time/div = 1 ms/div. Keep those four numbers handy.',
+      teach: 'vdiv', marks: ['ydiv', 'xdiv', 'vdiv', 'tdiv'], plug: null, fill: null, field: null
+    },
+    {
+      text: 'Peak-to-peak — plug into the formula: Vpp = Y × volts/div = 3.0 × 2.',
+      teach: 'vpp', marks: ['ydiv'], plug: 'y', fill: null, field: 'vpp'
+    },
+    {
+      text: 'Calculated: Vpp = 6.0 V. That is the full crest-to-trough height in volts.',
+      teach: 'vpp', marks: ['ydiv'], plug: 'y', fill: { vpp: '6' }, field: 'vpp'
+    },
+    {
+      text: 'Amplitude — plug in: A = Vpp / 2 = 6.0 / 2.',
+      teach: 'a', marks: ['peak'], plug: null, fill: null, field: 'a'
+    },
+    {
+      text: 'Calculated: A = 3.0 V. Amplitude is half of peak-to-peak.',
+      teach: 'a', marks: ['peak'], plug: null, fill: { a: '3' }, field: 'a'
+    },
+    {
+      text: 'Period — plug into the formula: T = X × time/div = 4.0 × 1 ms.',
+      teach: 't', marks: ['xdiv'], plug: 'x', fill: null, field: 'tms'
+    },
+    {
+      text: 'Calculated: T = 4.0 ms (= 0.004 s). That is one full cycle.',
+      teach: 't', marks: ['xdiv'], plug: 'x', fill: { tms: '4' }, field: 'tms'
+    },
+    {
+      text: 'Frequency — plug in: f = 1 / T. Convert T to seconds first: 4.0 ms = 0.004 s, so f = 1 / 0.004.',
+      teach: 'f', marks: ['wave'], plug: null, fill: null, field: 'f'
+    },
+    {
+      text: 'Calculated: f = 250 Hz. We have walked through Vpp, A, T, and f — hover the chart anytime to revisit a quantity.',
+      teach: 'f', marks: ['wave'], plug: null, fill: { f: '250' }, field: 'f', done: true
+    }
+  ];
+
+  const guideBeatEl = document.getElementById('guide-beat');
+  const btnGuide = document.getElementById('btn-guide');
+  let guideIndex = -1;
+
+  function applyGuideBeat(beat) {
+    if (!beat) return;
+    if (guideBeatEl) guideBeatEl.textContent = beat.text;
+
+    document.querySelectorAll('.teach-row').forEach(r => {
+      const match = beat.teach && r.getAttribute('data-formula') === beat.teach;
+      r.classList.toggle('active', !!match);
+      r.classList.toggle('hot', !!match && !!beat.plug);
+    });
+    if (beat.teach === 'vpp') {
+      const vrow = document.querySelector('.teach-row[data-formula="vdiv"]');
+      if (vrow) vrow.classList.add('active');
+    }
+    if (beat.teach === 't') {
+      const trow = document.querySelector('.teach-row[data-formula="tdiv"]');
+      if (trow) trow.classList.add('active');
+    }
+
+    resetSlots();
+    if (beat.plug === 'y' && slotY) {
+      slotY.textContent = String(WORKED.Y);
+      slotY.classList.add('live');
+    } else if (beat.plug === 'x' && slotX) {
+      slotX.textContent = String(WORKED.X);
+      slotX.classList.add('live');
+    }
+
+    document.querySelectorAll('#cro-stage .inspect-mark').forEach(m => {
+      const mark = m.getAttribute('data-mark');
+      m.classList.toggle('on', !!(beat.marks && beat.marks.indexOf(mark) >= 0));
+    });
+    document.querySelectorAll('.calc-field').forEach(f => {
+      f.classList.toggle('awake', beat.field && f.getAttribute('data-key') === beat.field);
+    });
+
+    if (beat.fill) {
+      Object.keys(beat.fill).forEach(key => {
+        const el = document.getElementById('in-' + key);
+        if (el) el.value = beat.fill[key];
+      });
+    }
+
+    if (vrTitle) vrTitle.textContent = beat.done ? 'Guided calc complete' : 'Guided calc';
+    if (vrBody) vrBody.textContent = beat.text;
+    if (vrFormula) vrFormula.textContent = '';
+    if (teachHint) teachHint.textContent = beat.text;
   }
-  if (btnOn) btnOn.addEventListener('click', () => setHand(true));
-  if (btnOff) btnOff.addEventListener('click', () => setHand(false));
+
+  function advanceGuide() {
+    if (!btnGuide) return;
+    if (guideIndex < 0) {
+      guideIndex = 0;
+    } else if (guideIndex >= GUIDE_BEATS.length - 1) {
+      guideIndex = -1;
+      clearInspect();
+      if (guideBeatEl) {
+        guideBeatEl.textContent = 'We will read the chart together — Y, X, volts/div, time/div — then walk each formula one beat at a time.';
+      }
+      btnGuide.textContent = 'Start guided calc';
+      return;
+    } else {
+      guideIndex++;
+    }
+    const beat = GUIDE_BEATS[guideIndex];
+    applyGuideBeat(beat);
+    if (beat.done) btnGuide.textContent = 'Start over';
+    else if (guideIndex === 0) btnGuide.textContent = 'Next →';
+    else btnGuide.textContent = 'Next →';
+    tryRenderMath();
+  }
+
+  if (btnGuide) btnGuide.addEventListener('click', advanceGuide);
 
   /* Optional extras — hover open, auto-close ~500ms after leave */
   const extras = document.getElementById('end-extras');

@@ -36,7 +36,7 @@
 html, body { height: 100%; }
 
 body, button, a, .nav-item, .nav-prev, .nav-next, .method-step,
-.chart-toggle button, .calc-actions button, .end-extras-toggle,
+.calc-actions button, .end-extras-toggle,
 .region-hit, .chart-hit {
   cursor: none !important;
 }
@@ -988,3 +988,160 @@ body.mode-practical .nav-next {
   .practical-shell-teach { grid-template-columns: 1fr; }
   .teach-row { grid-template-columns: 1fr; gap: 2px; }
 }
+
+
+/* —— Site-wide Practical theme: study surfaces —— */
+body.mode-practical .card {
+  background: rgba(18, 28, 34, 0.88);
+  border-color: rgba(126, 200, 168, 0.22);
+  box-shadow: 0 18px 48px -24px rgba(0, 0, 0, 0.55), 0 1px 0 rgba(126, 200, 168, 0.08) inset;
+  color: #e8f0f2;
+}
+body.mode-practical .card h2,
+body.mode-practical .card h3,
+body.mode-practical .card strong,
+body.mode-practical .aim-hero {
+  color: #e6f7f2;
+}
+body.mode-practical .card p,
+body.mode-practical .lede,
+body.mode-practical .airy,
+body.mode-practical .card em {
+  color: #c8d8d4;
+}
+body.mode-practical .card em { color: #7ec8a8; }
+body.mode-practical .muted,
+body.mode-practical .formula-note { color: #8aa8a0; }
+body.mode-practical .aim-hero {
+  background: linear-gradient(135deg, rgba(126, 200, 168, 0.12), rgba(212, 176, 106, 0.10));
+  border-color: rgba(126, 200, 168, 0.28);
+}
+body.mode-practical .outcome-list li,
+body.mode-practical .concept,
+body.mode-practical .formula-block,
+body.mode-practical .result-list li {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(126, 200, 168, 0.22);
+  color: #c8d8d4;
+}
+body.mode-practical .concept .label,
+body.mode-practical .formula-block .fname { color: #7ec8a8; }
+body.mode-practical .chart-explain {
+  background: rgba(14, 22, 28, 0.95);
+  border-top-color: rgba(126, 200, 168, 0.22);
+  color: #e8f0f2;
+}
+body.mode-practical .chart-wrap {
+  background: #fff;
+  border-color: rgba(126, 200, 168, 0.28);
+}
+body.mode-practical .method-step {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(126, 200, 168, 0.22);
+  color: #c8d8d4;
+}
+body.mode-practical .method-step strong { color: #e6f7f2; }
+body.mode-practical .method-step:hover,
+body.mode-practical .method-step.active {
+  background: rgba(126, 200, 168, 0.14);
+  border-color: rgba(126, 200, 168, 0.45);
+  color: #e6f7f2;
+}
+body.mode-practical .nav-prev:hover:not(:disabled) {
+  border-color: #7ec8a8;
+  color: #7ec8a8;
+  background: rgba(126, 200, 168, 0.1);
+}
+body.mode-practical .nav-next:hover:not(:disabled) {
+  background: #95d4b8;
+  color: #0c1418;
+  border-color: #95d4b8;
+}
+body.mode-practical .result-list .blank {
+  border-bottom-color: rgba(126, 200, 168, 0.45);
+}
+body.mode-practical .result-val {
+  font-family: var(--mono);
+  font-weight: 700;
+  color: #d4b06a;
+  min-width: 4.5em;
+}
+body.mode-practical .result-note {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  color: #8aa8a0;
+}
+body.mode-practical .katex { color: #e8f0f2; }
+
+/* Guided calc panel */
+.guide-box {
+  margin: 4px 0 12px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: rgba(126, 200, 168, 0.1);
+  border: 1px solid rgba(126, 200, 168, 0.35);
+}
+.guide-label {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #8aa8a0;
+  margin-bottom: 6px;
+}
+.guide-beat {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #e8f0f2;
+  min-height: 3.2em;
+}
+.calc-actions button.guide {
+  background: linear-gradient(135deg, #d4b06a, #7ec8a8);
+  color: #0c1418;
+  border-color: transparent;
+  font-weight: 700;
+}
+.calc-panel {
+  background: rgba(18, 28, 34, 0.92) !important;
+  border-color: rgba(126, 200, 168, 0.28) !important;
+  color: #e8f0f2;
+}
+.calc-field {
+  background: rgba(255, 255, 255, 0.06) !important;
+  border-color: rgba(126, 200, 168, 0.22) !important;
+}
+.calc-field.awake {
+  border-color: rgba(212, 176, 106, 0.55) !important;
+  box-shadow: 0 0 0 1px rgba(212, 176, 106, 0.25);
+}
+.calc-field label { color: #c8d8d4 !important; }
+.calc-field input {
+  background: rgba(8, 14, 18, 0.85) !important;
+  color: #e8f0f2 !important;
+  border-color: rgba(126, 200, 168, 0.35) !important;
+}
+.calc-field .unit { color: #8aa8a0 !important; }
+.calc-actions button {
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #c8d8d4 !important;
+  border-color: rgba(126, 200, 168, 0.3) !important;
+}
+.calc-actions button.check {
+  background: #7ec8a8 !important;
+  color: #0c1418 !important;
+  border-color: #7ec8a8 !important;
+}
+.calc-actions button.guide {
+  background: linear-gradient(135deg, #d4b06a, #7ec8a8) !important;
+  color: #0c1418 !important;
+  border-color: transparent !important;
+}
+.calc-feedback { color: #8aa8a0 !important; }
+.calc-feedback.ok { color: #7ec8a8 !important; }
+.calc-feedback.bad { color: #e08a7a !important; }
+.calc-field.ok { border-color: #7ec8a8 !important; background: rgba(126, 200, 168, 0.12) !important; }
+.calc-field.bad { border-color: #e08a7a !important; background: rgba(224, 138, 122, 0.12) !important; }
+
+/* Trace: example traces always visible — no blank-paper toggle */
+.chart-toggle { display: none !important; }
+.chart-canvas.hand-hidden .hand-layer { opacity: 1; }
