@@ -397,6 +397,25 @@
         </div>
       </section>
 
+
+      <!-- MCQs (before Practical) -->
+      <section class="view" id="view-mcqs">
+        <div class="card card-wide">
+          <h2>MCQs</h2>
+          <p class="lede">All lab questions on one scrollable page. Pick an answer — wrong choices nudge you to try again; a correct pick locks and shows the explanation.</p>
+          <div class="mcq-toolbar">
+            <span class="mcq-progress" id="mcq-progress">0 / 0 answered</span>
+            <button type="button" class="mcq-reset" id="mcq-reset">Reset answers</button>
+          </div>
+          <div class="mcq-list" id="mcq-list" aria-live="polite">
+            <p class="mcq-loading">Loading question bank…</p>
+          </div>
+          <div class="page-end">
+            <button type="button" class="nav-next" data-next>Next →</button>
+          </div>
+        </div>
+      </section>
+
       <!-- PRACTICAL (LAST) -->
       <section class="view practical-view" id="view-practical">
         <div class="practical-shell practical-shell-teach">
@@ -594,6 +613,51 @@
               <div class="calc-feedback" id="fb-calc" role="status" aria-live="polite"></div>
             </div>
           </aside>
+        </div>
+
+
+        <div class="draw-mcq" id="draw-mcq">
+          <h3>Draw the waveform</h3>
+          <p class="lede draw-lede">Choose the next stroke on the lab graph paper. One question at a time — wrong picks nudge you; correct locks and explains, then Next advances.</p>
+          <div class="draw-layout">
+            <div class="draw-canvas-wrap">
+              <img class="draw-paper" src="assets/graph-paper.png" alt="Blank laboratory graph paper" width="803" height="1141" loading="lazy">
+              <svg class="draw-layer" id="draw-layer" viewBox="0 0 803 1141" xmlns="http://www.w3.org/2000/svg" aria-label="Progressive waveform strokes">
+                <style>
+                  .dw { font-family: Caveat, cursive; fill: #1a2744; }
+                  .dw-title { font-size: 36px; font-weight: 700; }
+                  .dw-note { font-size: 22px; }
+                  .dink { fill: none; stroke: #1e3a8a; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+                  .dink-axes { stroke: #1a2744; stroke-width: 1.8; }
+                  .dink-ghost { stroke: #94a3b8; stroke-width: 2; stroke-dasharray: 6 5; opacity: 0.55; }
+                </style>
+                <text class="dw dw-title" x="70" y="78" transform="rotate(-1.2 70 78)">Build the triangular trace</text>
+                <text class="dw dw-note" x="70" y="112">volts/div = 2 V/div · time/div = 1 ms/div</text>
+                <g id="draw-axes">
+                  <path class="dink dink-axes" d="M90 320 C92 318, 94 200, 95 190"/>
+                  <path class="dink dink-axes" d="M90 320 C200 322, 520 318, 620 321"/>
+                  <text class="dw dw-note" x="55" y="210" transform="rotate(-90 55 210)">V</text>
+                  <text class="dw dw-note" x="600" y="345">t →</text>
+                </g>
+                <g id="draw-committed"></g>
+                <g id="draw-preview"></g>
+              </svg>
+            </div>
+            <aside class="draw-side">
+              <div class="draw-meta">
+                <span class="draw-step" id="draw-step">Stroke 1 / 4</span>
+                <span class="cat-tag" id="draw-cat">draw_graph</span>
+              </div>
+              <p class="draw-q" id="draw-q">Which stroke should come next?</p>
+              <div class="draw-options" id="draw-options"></div>
+              <div class="draw-feedback idle" id="draw-feedback" role="status" aria-live="polite"></div>
+              <div class="draw-nav">
+                <button type="button" class="draw-btn" id="draw-back" disabled>← Back</button>
+                <button type="button" class="draw-btn primary" id="draw-next" disabled>Next →</button>
+                <button type="button" class="draw-btn" id="draw-restart">Restart</button>
+              </div>
+            </aside>
+          </div>
         </div>
 
         <div class="end-extras" id="end-extras">

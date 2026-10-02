@@ -1,0 +1,406 @@
+{
+  "id": "oscilloscope-lab-mcq-bank",
+  "subject": "Medical Physics and Instrumentation",
+  "subjectId": "medical_physics_oscilloscope",
+  "title": "Oscilloscope Lab MCQ Bank",
+  "formSize": 28,
+  "forms": [
+    "A"
+  ],
+  "bank": {
+    "A": [
+      {
+        "id": "OSC001",
+        "type": "mcq",
+        "cat": "osc_lab_procedure",
+        "q": "What is obtained by multiplying the vertical deflection by the volts per division setting?",
+        "options": [
+          "The displayed peak-to-peak voltage",
+          "The measured horizontal time period",
+          "The selected trigger threshold level",
+          "The calculated reciprocal frequency"
+        ],
+        "correct": 0,
+        "explain": "Vertical deflection in divisions multiplied by volts per division gives peak-to-peak voltage. Half of that value gives amplitude. Horizontal deflection with time per division gives period. Frequency is the reciprocal of period. Trigger threshold sets the switching point and is not obtained from the vertical scale."
+      },
+      {
+        "id": "OSC002",
+        "type": "mcq",
+        "cat": "osc_lab_procedure",
+        "q": "Which adjustment is used to make the displayed trace sharp?",
+        "options": [
+          "The focus knob on the oscilloscope front panel",
+          "The intensity knob on the oscilloscope front panel",
+          "The time per division switch on the front panel",
+          "The output cable from the function generator source"
+        ],
+        "correct": 0,
+        "explain": "The focus control sharpens the electron beam trace on the screen. Intensity controls brightness. Time per division stretches or compresses the waveform horizontally. The output cable carries the signal but does not sharpen the trace."
+      },
+      {
+        "id": "OSC003",
+        "type": "mcq",
+        "cat": "osc_lab_procedure",
+        "q": "Why is the time per division setting adjusted until the displayed wave becomes stable?",
+        "options": [
+          "It increases the amplitude of the input signal.",
+          "It changes the vertical volts per division setting.",
+          "It matches the sweep frequency to the signal frequency.",
+          "It converts the displayed trace into digital samples."
+        ],
+        "correct": 2,
+        "explain": "Time per division controls the horizontal sweep rate. A stable trace requires the sweep frequency to match the input signal frequency. This adjustment does not raise signal amplitude, does not change volts per division, and does not convert the trace into digital samples."
+      },
+      {
+        "id": "OSC004",
+        "type": "mcq",
+        "cat": "osc_general_principles",
+        "q": "Which statement correctly identifies bandwidth?",
+        "options": [
+          "The rise time marks the ten to ninety percent interval.",
+          "The sampling rate sets the analog to digital conversion speed.",
+          "The input impedance limits loading on the measured circuit.",
+          "The bandwidth marks the minus three decibel frequency point."
+        ],
+        "correct": 3,
+        "explain": "Bandwidth is the frequency where the response falls to the minus three decibel point, about 70.7 percent of the low-frequency amplitude. Rise time describes edge transition speed. Sampling rate describes digitization speed. Input impedance describes circuit loading."
+      },
+      {
+        "id": "OSC005",
+        "type": "mcq",
+        "cat": "osc_general_principles",
+        "q": "What does the Nyquist criterion require for faithful digital reconstruction?",
+        "options": [
+          "The sample rate must exceed twice the highest signal frequency.",
+          "The sample rate must match the display refresh cycle exactly.",
+          "The analog bandwidth must stay below the fundamental signal frequency.",
+          "The input impedance must exceed the source output resistance greatly."
+        ],
+        "correct": 0,
+        "explain": "The Nyquist criterion requires a sample rate above twice the highest signal frequency to prevent aliasing. Display refresh affects viewing, not waveform reconstruction. Keeping analog bandwidth below the signal frequency would remove needed content. Input impedance concerns loading, not the sampling theorem."
+      },
+      {
+        "id": "OSC006",
+        "type": "mcq",
+        "cat": "osc_general_principles",
+        "q": "Which mode plots one input channel against another instead of against time?",
+        "options": [
+          "The alternate mode switches channels after each horizontal sweep.",
+          "The X-Y mode uses one channel to drive horizontal deflection.",
+          "The chopped mode interleaves two traces during a single sweep.",
+          "The persistence mode overlays repeated acquisitions on screen."
+        ],
+        "correct": 1,
+        "explain": "X-Y mode applies one channel to horizontal deflection and another to vertical deflection, producing a signal-versus-signal display. Alternate mode switches channels between sweeps. Chopped mode interleaves traces within a sweep. Persistence mode overlays repeated time-based acquisitions."
+      },
+      {
+        "id": "OSC007",
+        "type": "mcq",
+        "cat": "osc_instrument_types",
+        "q": "Which instrument combines analog waveform channels with digital logic channels?",
+        "options": [
+          "A handheld oscilloscope packs controls into a portable case.",
+          "A PC-based oscilloscope sends captured data to a host computer.",
+          "A mixed-signal oscilloscope adds digital logic analyzer channels.",
+          "An analog storage oscilloscope retains traces on a CRT target."
+        ],
+        "correct": 2,
+        "explain": "A mixed-signal oscilloscope combines analog input channels with digital logic channels for synchronized debugging. A handheld instrument emphasizes portability. A PC-based instrument relies on a host computer. An analog storage instrument retains CRT traces but does not add logic channels."
+      },
+      {
+        "id": "OSC008",
+        "type": "mcq",
+        "cat": "osc_instrument_types",
+        "q": "What is a defining feature of a digital storage oscilloscope?",
+        "options": [
+          "It uses two electron guns for independent beam display.",
+          "It relies on phosphor afterglow for visual persistence.",
+          "It bypasses analog to digital conversion during capture.",
+          "It stores sampled waveforms in memory for later recall."
+        ],
+        "correct": 3,
+        "explain": "A digital storage oscilloscope digitizes the input signal and stores samples in memory for recall, measurement, and post-acquisition analysis. Two electron guns describe a dual-beam analog design. Phosphor afterglow describes analog persistence. Bypassing analog-to-digital conversion contradicts digital acquisition."
+      },
+      {
+        "id": "OSC009",
+        "type": "mcq",
+        "cat": "osc_instrument_types",
+        "q": "Which oscilloscope type is built for field work with battery power and rugged construction?",
+        "options": [
+          "A handheld unit with battery operation and rugged casing.",
+          "A mixed-domain unit with spectrum analysis input.",
+          "A digital sampling unit for repetitive high frequency waves.",
+          "A PC-based unit with an external acquisition module."
+        ],
+        "correct": 0,
+        "explain": "Handheld oscilloscopes are battery powered and built for portable field diagnostics. Mixed-domain instruments add spectrum analysis. Digital sampling instruments target repetitive high-frequency reconstruction. PC-based instruments depend on an external host computer."
+      },
+      {
+        "id": "OSC010",
+        "type": "mcq",
+        "cat": "ecg_monitoring",
+        "q": "In a standard electrocardiogram, which component represents ventricular depolarization?",
+        "options": [
+          "The P wave marks atrial depolarization.",
+          "The QRS complex marks ventricular depolarization.",
+          "The T wave marks ventricular repolarization.",
+          "The U wave marks possible delayed repolarization."
+        ],
+        "correct": 1,
+        "explain": "The QRS complex represents ventricular depolarization. The P wave represents atrial depolarization. The T wave represents ventricular repolarization. The U wave may reflect delayed repolarization but is not the main marker of ventricular depolarization."
+      },
+      {
+        "id": "OSC011",
+        "type": "mcq",
+        "cat": "ecg_monitoring",
+        "q": "At the standard electrocardiogram paper speed, what does one small square represent on the time axis?",
+        "options": [
+          "0.01 second of horizontal time",
+          "0.10 millivolt of vertical amplitude",
+          "0.04 second of horizontal time",
+          "0.20 second of horizontal time"
+        ],
+        "correct": 2,
+        "explain": "At 25 millimeters per second, one small square equals 0.04 second. One large square equals 0.20 second. The vertical calibration of 10 millimeters per millivolt makes one small square equal 0.10 millivolt, not a time interval. The value 0.01 second is not the standard small-square time."
+      },
+      {
+        "id": "OSC012",
+        "type": "mcq",
+        "cat": "ecg_monitoring",
+        "q": "Which device records heart electrical activity continuously for about one to two days?",
+        "options": [
+          "A standard resting electrocardiograph records a brief ten second trace during a clinic visit.",
+          "An event recorder captures patient activated segments and can be worn for several weeks at home.",
+          "An implantable loop recorder monitors subcutaneously and can store rhythms for up to three years.",
+          "A Holter monitor records heart activity continuously for about one to two days during daily life."
+        ],
+        "correct": 3,
+        "explain": "A Holter monitor provides continuous ambulatory recording for about 24 to 48 hours. A standard resting electrocardiograph records a brief trace. An event recorder captures selected episodes and may be worn longer, but it is not defined by continuous one to two day recording. An implantable loop recorder remains under the skin for much longer periods."
+      },
+      {
+        "id": "OSC013",
+        "type": "mcq",
+        "cat": "cro_basics",
+        "q": "What does a cathode ray oscilloscope display on its screen?",
+        "options": [
+          "A live graph of voltage against time for the input signal",
+          "A printed table of resistor values from the circuit board",
+          "A static photograph of the function generator front panel",
+          "A spectrum of light wavelengths from the cathode filament"
+        ],
+        "correct": 0,
+        "explain": "A CRO draws a live voltage-versus-time waveform. Vertical deflection shows voltage; horizontal sweep shows time. It does not print resistor tables, photograph the generator, or display optical spectra."
+      },
+      {
+        "id": "OSC014",
+        "type": "mcq",
+        "cat": "cro_basics",
+        "q": "On a standard CRO graticule, what is one division?",
+        "options": [
+          "One numbered square on the screen grid used as a counting unit",
+          "The full height of the cathode ray tube phosphor coating",
+          "The distance between the probe tip and the signal source",
+          "The total number of channels available on the instrument"
+        ],
+        "correct": 0,
+        "explain": "A division is one square of the graticule. You count vertical divisions for voltage and horizontal divisions for time, then multiply by the scale settings. It is not the full CRT height, probe length, or channel count."
+      },
+      {
+        "id": "OSC015",
+        "type": "mcq",
+        "cat": "cro_basics",
+        "q": "What does the volts per division control set?",
+        "options": [
+          "How many volts each vertical graticule square represents",
+          "How many milliseconds each horizontal square represents",
+          "The trigger level at which the sweep starts each cycle",
+          "The brightness of the electron beam on the screen"
+        ],
+        "correct": 0,
+        "explain": "Volts/div is the vertical scale: each vertical square equals that many volts. Time/div sets the horizontal scale. Trigger level starts the sweep. Intensity sets brightness."
+      },
+      {
+        "id": "OSC016",
+        "type": "mcq",
+        "cat": "cro_basics",
+        "q": "What does the time per division control set?",
+        "options": [
+          "How much time each horizontal graticule square represents",
+          "How many volts each vertical graticule square represents",
+          "The focus sharpness of the electron beam spot",
+          "The output amplitude of the function generator"
+        ],
+        "correct": 0,
+        "explain": "Time/div is the horizontal time base. Vertical volts/div sets voltage scale. Focus sharpens the beam. Function-generator amplitude is set on the generator, not by time/div."
+      },
+      {
+        "id": "OSC017",
+        "type": "mcq",
+        "cat": "osc_lab_procedure",
+        "q": "How is amplitude A obtained from the peak-to-peak voltage?",
+        "options": [
+          "Amplitude equals half of the measured peak-to-peak voltage",
+          "Amplitude equals twice the measured peak-to-peak voltage",
+          "Amplitude equals the reciprocal of the peak-to-peak voltage",
+          "Amplitude equals peak-to-peak voltage multiplied by time/div"
+        ],
+        "correct": 0,
+        "explain": "By definition A = Vpp / 2. Doubling, taking the reciprocal, or multiplying by time/div does not give amplitude."
+      },
+      {
+        "id": "OSC018",
+        "type": "mcq",
+        "cat": "osc_lab_procedure",
+        "q": "How is the time period T of one cycle calculated from the screen?",
+        "options": [
+          "Horizontal divisions for one cycle multiplied by time per division",
+          "Vertical divisions peak-to-peak multiplied by volts per division",
+          "The reciprocal of the horizontal division count alone",
+          "Volts per division divided by the measured vertical height"
+        ],
+        "correct": 0,
+        "explain": "T = X \u00d7 (time/div), where X is the horizontal span of one full cycle. Vertical counts give voltage, not period. Frequency is 1/T, not 1/X alone."
+      },
+      {
+        "id": "OSC019",
+        "type": "mcq",
+        "cat": "osc_lab_procedure",
+        "q": "How is frequency f related to the time period T?",
+        "options": [
+          "Frequency equals the reciprocal of the period: f = 1 / T",
+          "Frequency equals the period multiplied by volts per division",
+          "Frequency equals twice the period in milliseconds",
+          "Frequency equals the horizontal division count alone"
+        ],
+        "correct": 0,
+        "explain": "f = 1/T with T in seconds (convert ms to s first). Multiplying by volts/div, doubling the period, or using only X does not give frequency."
+      },
+      {
+        "id": "OSC020",
+        "type": "mcq",
+        "cat": "osc_lab_procedure",
+        "q": "With Y = 3.0 div and volts/div = 2 V/div, what is Vpp?",
+        "options": [
+          "6.0 V peak-to-peak",
+          "3.0 V peak-to-peak",
+          "1.5 V peak-to-peak",
+          "5.0 V peak-to-peak"
+        ],
+        "correct": 0,
+        "explain": "Vpp = Y \u00d7 volts/div = 3.0 \u00d7 2 = 6.0 V. Amplitude would then be A = 6.0 / 2 = 3.0 V."
+      },
+      {
+        "id": "OSC021",
+        "type": "mcq",
+        "cat": "osc_lab_procedure",
+        "q": "With X = 4.0 div and time/div = 1 ms/div, what are T and f?",
+        "options": [
+          "T = 4.0 ms and f = 250 Hz",
+          "T = 4.0 s and f = 0.25 Hz",
+          "T = 1.0 ms and f = 1000 Hz",
+          "T = 8.0 ms and f = 125 Hz"
+        ],
+        "correct": 0,
+        "explain": "T = 4.0 \u00d7 1 ms = 4.0 ms = 0.004 s. Then f = 1 / 0.004 = 250 Hz."
+      },
+      {
+        "id": "OSC022",
+        "type": "mcq",
+        "cat": "osc_lab_procedure",
+        "q": "Which control mainly changes how bright the trace appears?",
+        "options": [
+          "The intensity knob on the oscilloscope front panel",
+          "The focus knob on the oscilloscope front panel",
+          "The volts per division switch on the vertical amplifier",
+          "The coupling switch between AC and DC input modes"
+        ],
+        "correct": 0,
+        "explain": "Intensity sets beam brightness. Focus sharpens the spot. Volts/div scales vertical size. Coupling selects AC or DC input path."
+      },
+      {
+        "id": "OSC023",
+        "type": "mcq",
+        "cat": "osc_lab_procedure",
+        "q": "In the lab method, where does the function-generator output connect?",
+        "options": [
+          "To a CRO input channel such as CH1",
+          "To the CRO intensity and focus knobs only",
+          "To the laboratory mains earth pin alone",
+          "To the printer port on the digital storage unit"
+        ],
+        "correct": 0,
+        "explain": "The generator output feeds a CRO channel (e.g. CH1) so the waveform appears on screen. Intensity/focus are local beam controls, not signal inputs."
+      },
+      {
+        "id": "OSC024",
+        "type": "mcq",
+        "cat": "ecg_monitoring",
+        "q": "What does an EEG primarily record?",
+        "options": [
+          "Electrical activity of the brain from scalp electrodes",
+          "Mechanical contraction force of skeletal muscle fibres",
+          "Blood pressure waves in the brachial artery only",
+          "Optical absorbance of haemoglobin in capillary beds"
+        ],
+        "correct": 0,
+        "explain": "EEG (electroencephalogram) records cortical electrical rhythms via scalp electrodes. Muscle force is EMG territory; blood pressure and optical oximetry are different modalities."
+      },
+      {
+        "id": "OSC025",
+        "type": "mcq",
+        "cat": "ecg_monitoring",
+        "q": "What does an EMG primarily record?",
+        "options": [
+          "Electrical activity of muscle fibres during contraction",
+          "Atrial and ventricular depolarization of the heart alone",
+          "Alpha and beta cortical rhythms from the scalp",
+          "Continuous Holter monitoring of ambulatory ECG"
+        ],
+        "correct": 0,
+        "explain": "EMG (electromyogram) senses muscle fibre electrical activity. Heart depolarization is ECG; cortical rhythms are EEG; Holter is ambulatory ECG recording."
+      },
+      {
+        "id": "OSC026",
+        "type": "mcq",
+        "cat": "ecg_monitoring",
+        "q": "Why do medical monitors use the same reading skill as a lab CRO?",
+        "options": [
+          "They display body signals as voltage against time for measurement",
+          "They replace the CRO graticule with a chemical strip chart only",
+          "They measure optical wavelength instead of electrical voltage",
+          "They ignore amplitude and report only average room temperature"
+        ],
+        "correct": 0,
+        "explain": "ECG, EEG, and EMG monitors present amplified bioelectric signals on a voltage\u2013time display. Counting amplitude and timing on that graph is the same skill practised on the lab CRO."
+      },
+      {
+        "id": "OSC027",
+        "type": "mcq",
+        "cat": "cro_basics",
+        "q": "What is the bright moving line on the CRO screen called?",
+        "options": [
+          "The trace \u2014 the waveform drawn by the electron beam",
+          "The graticule \u2014 the etched or printed measuring grid",
+          "The trigger \u2014 the level that starts each horizontal sweep",
+          "The probe \u2014 the cable tip that contacts the circuit"
+        ],
+        "correct": 0,
+        "explain": "The bright line is the trace (waveform). The graticule is the grid. Trigger starts the sweep. The probe is the input tip/cable."
+      },
+      {
+        "id": "OSC028",
+        "type": "mcq",
+        "cat": "osc_lab_procedure",
+        "q": "After measuring Vpp = 6.0 V, what is the amplitude A?",
+        "options": [
+          "3.0 V",
+          "6.0 V",
+          "12.0 V",
+          "0.167 V"
+        ],
+        "correct": 0,
+        "explain": "A = Vpp / 2 = 6.0 / 2 = 3.0 V. Leaving A = Vpp, doubling, or taking 1/Vpp are incorrect."
+      }
+    ]
+  }
+}

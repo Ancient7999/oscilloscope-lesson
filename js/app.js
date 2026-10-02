@@ -156,6 +156,7 @@
     { id: 'method', label: 'Method' },
     { id: 'formulas', label: 'Formulas & results' },
     { id: 'trace', label: 'Trace' },
+    { id: 'mcqs', label: 'MCQs' },
     { id: 'practical', label: 'Practical' }
   ];
 
@@ -755,6 +756,13 @@
     } else if (guideIndex >= GUIDE_BEATS.length - 1) {
       guideIndex = -1;
       clearInspect();
+      document.querySelectorAll('#calc-panel input').forEach(inp => { inp.value = ''; });
+      document.querySelectorAll('.calc-field').forEach(f => {
+        f.classList.remove('ok', 'bad', 'awake');
+      });
+      const fbCalc = document.getElementById('fb-calc');
+      if (fbCalc) { fbCalc.className = 'calc-feedback'; fbCalc.textContent = ''; }
+      resetSlots();
       if (guideBeatEl) {
         guideBeatEl.textContent = 'We will read the chart together — Y, X, volts/div, time/div — then walk each formula one beat at a time.';
       }
@@ -801,5 +809,324 @@
       else openExtras();
     });
   }
+
+
+  /* —— MCQs: scrollable full bank (skeleton select / feedback logic) —— */
+  const mcqList = document.getElementById('mcq-list');
+  const mcqProgress = document.getElementById('mcq-progress');
+  const mcqResetBtn = document.getElementById('mcq-reset');
+  let mcqBank = [];
+  let mcqAnswers = [];
+  const MCQ_KEYS = ['A', 'B', 'C', 'D'];
+
+  function escapeHtml(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  function updateMcqProgress() {
+    if (!mcqProgress) return;
+    const done = mcqAnswers.filter(a => a != null).length;
+    mcqProgress.textContent = done + ' / ' + mcqBank.length + ' answered';
+  }
+
+  function renderMcqList() {
+    if (!mcqList) return;
+    mcqList.innerHTML = '';
+    if (!mcqBank.length) {
+      mcqList.innerHTML = '<p class="mcq-loading">No questions loaded.</p>';
+      updateMcqProgress();
+      return;
+    }
+    mcqBank.forEach((q, qi) => {
+      const card = document.createElement('article');
+      card.className = 'mcq-card';
+      card.dataset.qi = String(qi);
+      const answered = mcqAnswers[qi];
+      const locked = answered != null;
+      card.innerHTML =
+        '<div class="mcq-card-top">' +
+          '<span class="mcq-id">' + escapeHtml(q.id || ('Q' + (qi + 1))) + '</span>' +
+          '<span class="mcq-cat">' + escapeHtml(q.cat || 'mcq') + '</span>' +
+        '</div>' +
+        '<div class="mcq-q">' + escapeHtml(q.q) + '</div>' +
+        '<div class="mcq-options"></div>' +
+        '<div class="mcq-feedback idle" data-fb></div>';
+      const optsHost = card.querySelector('.mcq-options');
+      const fb = card.querySelector('[data-fb]');
+      (q.options || []).forEach((opt, oi) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'mcq-opt';
+        btn.dataset.key = MCQ_KEYS[oi] || String(oi + 1);
+        btn.textContent = opt;
+        if (locked) {
+          btn.disabled = true;
+          if (oi === q.correct) btn.classList.add('correct');
+        }
+        btn.addEventListener('click', () => selectMcqAnswer(qi, oi, card));
+        optsHost.appendChild(btn);
+      });
+      if (locked) {
+        fb.className = 'mcq-feedback good';
+        fb.textContent = '✓ ' + (q.explain || '');
+      }
+      mcqList.appendChild(card);
+    });
+    updateMcqProgress();
+  }
+
+  function selectMcqAnswer(qi, oi, card) {
+    const q = mcqBank[qi];
+    if (!q || mcqAnswers[qi] != null) return;
+    const fb = card.querySelector('[data-fb]');
+    const opts = card.querySelectorAll('.mcq-opt');
+    if (oi !== q.correct) {
+      fb.className = 'mcq-feedback soft';
+      fb.textContent = 'not that one · try again';
+      const bad = opts[oi];
+      if (bad) {
+        bad.classList.add('soft-wrong');
+        setTimeout(() => bad.classList.remove('soft-wrong'), 420);
+      }
+      clearTimeout(selectMcqAnswer._t);
+      selectMcqAnswer._t = setTimeout(() => {
+        if (mcqAnswers[qi] == null) {
+          fb.className = 'mcq-feedback idle';
+          fb.textContent = '';
+        }
+      }, 900);
+      return;
+    }
+    mcqAnswers[qi] = oi;
+    opts.forEach((o, i) => {
+      o.disabled = true;
+      if (i === oi) o.classList.add('correct');
+    });
+    fb.className = 'mcq-feedback good';
+    fb.textContent = '✓ ' + (q.explain || '');
+    card.classList.add('correct-pulse');
+    setTimeout(() => card.classList.remove('correct-pulse'), 650);
+    updateMcqProgress();
+  }
+
+  function resetMcqAnswers() {
+    mcqAnswers = new Array(mcqBank.length).fill(null);
+    renderMcqList();
+  }
+
+  if (mcqResetBtn) mcqResetBtn.addEventListener('click', resetMcqAnswers);
+
+  fetch('data/mcq-bank.json')
+    .then(r => {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    })
+    .then(data => {
+      const form = (data.forms && data.forms[0]) || 'A';
+      mcqBank = (data.bank && data.bank[form]) ? data.bank[form].slice() : [];
+      mcqAnswers = new Array(mcqBank.length).fill(null);
+      renderMcqList();
+    })
+    .catch(err => {
+      if (mcqList) {
+        mcqList.innerHTML = '<p class="mcq-loading">Could not load data/mcq-bank.json (' + escapeHtml(err.message) + ').</p>';
+      }
+    });
+
+  /* —— Practical: draw-graph MCQ (one stroke at a time) —— */
+  const DRAW_QS = [
+    {
+      q: 'First stroke: from the origin, which path starts the triangular wave rising to the first peak?',
+      prior: [],
+      choices: [
+        { label: 'Rising diagonal to first peak', path: 'M110 320 L160 230' },
+        { label: 'Flat baseline to the right', path: 'M110 320 L210 320' },
+        { label: 'Falling diagonal downward', path: 'M110 320 L160 400' },
+        { label: 'Vertical spike only', path: 'M110 320 L110 200' }
+      ],
+      correct: 0,
+      explain: 'A triangular wave begins with a straight rising edge from the baseline to the first peak.'
+    },
+    {
+      q: 'Next stroke: from the first peak, which path continues the triangle correctly?',
+      prior: ['M110 320 L160 230'],
+      choices: [
+        { label: 'Falling diagonal to the baseline', path: 'M160 230 L210 320' },
+        { label: 'Continue rising higher', path: 'M160 230 L210 160' },
+        { label: 'Horizontal flat top', path: 'M160 230 L220 230' },
+        { label: 'Drop vertically then stop', path: 'M160 230 L160 320' }
+      ],
+      correct: 0,
+      explain: 'After each peak the triangle falls in a straight line back to the baseline (zero crossing / trough line used here).'
+    },
+    {
+      q: 'Next stroke: from that valley, which segment climbs to the second peak?',
+      prior: ['M110 320 L160 230', 'M160 230 L210 320'],
+      choices: [
+        { label: 'Rising diagonal to second peak', path: 'M210 320 L262 228' },
+        { label: 'Stay on the baseline', path: 'M210 320 L310 320' },
+        { label: 'Curve upward like a sine', path: 'M210 320 Q236 200, 262 320' },
+        { label: 'Square step up then flat', path: 'M210 320 L210 230 L262 230' }
+      ],
+      correct: 0,
+      explain: 'The next half-cycle rises again in a straight line — that is what makes the wave triangular, not sinusoidal or square.'
+    },
+    {
+      q: 'Final stroke for this segment: complete the second tooth of the triangle.',
+      prior: ['M110 320 L160 230', 'M160 230 L210 320', 'M210 320 L262 228'],
+      choices: [
+        { label: 'Falling diagonal back to baseline', path: 'M262 228 L310 322' },
+        { label: 'Rise to a third higher peak', path: 'M262 228 L310 150' },
+        { label: 'Arc over to the right', path: 'M262 228 Q286 280, 310 228' },
+        { label: 'Jump left back to the origin', path: 'M262 228 L110 320' }
+      ],
+      correct: 0,
+      explain: 'Close the second peak with another falling edge to the baseline. Repeating rise–fall builds the full triangular trace.'
+    }
+  ];
+
+  let drawIndex = 0;
+  let drawLocked = false;
+  let drawAnswers = new Array(DRAW_QS.length).fill(null);
+  const drawCommitted = document.getElementById('draw-committed');
+  const drawPreview = document.getElementById('draw-preview');
+  const drawOptions = document.getElementById('draw-options');
+  const drawFeedback = document.getElementById('draw-feedback');
+  const drawQ = document.getElementById('draw-q');
+  const drawStep = document.getElementById('draw-step');
+  const drawNext = document.getElementById('draw-next');
+  const drawBack = document.getElementById('draw-back');
+  const drawRestart = document.getElementById('draw-restart');
+
+  function miniSvg(pathD) {
+    return '<svg viewBox="90 180 250 180" xmlns="http://www.w3.org/2000/svg">' +
+      '<rect width="100%" height="100%" fill="#f8fafc"/>' +
+      '<path d="M100 320 L320 320" fill="none" stroke="#cbd5e1" stroke-width="1.5"/>' +
+      '<path d="' + pathD + '" fill="none" stroke="#1e3a8a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>' +
+      '</svg>';
+  }
+
+  function paintDrawCanvas(q, previewPath) {
+    if (!drawCommitted) return;
+    drawCommitted.innerHTML = '';
+    (q.prior || []).forEach(d => {
+      const p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      p.setAttribute('class', 'dink');
+      p.setAttribute('d', d);
+      drawCommitted.appendChild(p);
+    });
+    if (drawPreview) {
+      drawPreview.innerHTML = '';
+      if (previewPath) {
+        const p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        p.setAttribute('class', 'dink');
+        p.setAttribute('d', previewPath);
+        drawPreview.appendChild(p);
+      }
+    }
+  }
+
+  function renderDrawQuestion() {
+    if (!drawOptions || !DRAW_QS.length) return;
+    const q = DRAW_QS[drawIndex];
+    drawLocked = drawAnswers[drawIndex] != null;
+    if (drawStep) drawStep.textContent = 'Stroke ' + (drawIndex + 1) + ' / ' + DRAW_QS.length;
+    if (drawQ) drawQ.textContent = q.q;
+    const preview = drawLocked ? q.choices[q.correct].path : null;
+    paintDrawCanvas(q, preview);
+    drawOptions.innerHTML = '';
+    q.choices.forEach((ch, i) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'draw-opt';
+      btn.innerHTML =
+        '<span class="draw-opt-key">' + MCQ_KEYS[i] + '</span>' +
+        '<span class="draw-opt-mini">' + miniSvg(ch.path) + '</span>' +
+        '<span class="draw-opt-label">' + escapeHtml(ch.label) + '</span>';
+      if (drawLocked) {
+        btn.disabled = true;
+        if (i === q.correct) btn.classList.add('correct');
+      }
+      btn.addEventListener('click', () => selectDrawAnswer(i));
+      drawOptions.appendChild(btn);
+    });
+    if (drawFeedback) {
+      if (drawLocked) {
+        drawFeedback.className = 'draw-feedback good';
+        drawFeedback.textContent = '✓ ' + (q.explain || '');
+      } else {
+        drawFeedback.className = 'draw-feedback idle';
+        drawFeedback.textContent = 'Pick the next stroke · A–D';
+      }
+    }
+    if (drawNext) drawNext.disabled = !drawLocked || drawIndex >= DRAW_QS.length - 1;
+    if (drawBack) drawBack.disabled = drawIndex <= 0;
+    // On last solved question, allow Next to stay disabled (or show complete)
+    if (drawNext && drawLocked && drawIndex >= DRAW_QS.length - 1) {
+      drawNext.disabled = true;
+      drawNext.textContent = 'Done';
+    } else if (drawNext) {
+      drawNext.textContent = 'Next →';
+    }
+  }
+
+  function selectDrawAnswer(i) {
+    const q = DRAW_QS[drawIndex];
+    if (!q || drawLocked) return;
+    if (i !== q.correct) {
+      if (drawFeedback) {
+        drawFeedback.className = 'draw-feedback soft';
+        drawFeedback.textContent = 'not that one · try again';
+      }
+      const bad = drawOptions && drawOptions.children[i];
+      if (bad) {
+        bad.classList.add('soft-wrong');
+        setTimeout(() => bad.classList.remove('soft-wrong'), 420);
+      }
+      clearTimeout(selectDrawAnswer._t);
+      selectDrawAnswer._t = setTimeout(() => {
+        if (!drawLocked && drawFeedback) {
+          drawFeedback.className = 'draw-feedback idle';
+          drawFeedback.textContent = 'Pick the next stroke · A–D';
+        }
+      }, 900);
+      return;
+    }
+    drawAnswers[drawIndex] = i;
+    drawLocked = true;
+    paintDrawCanvas(q, q.choices[q.correct].path);
+    Array.from(drawOptions.children).forEach((btn, bi) => {
+      btn.disabled = true;
+      if (bi === i) btn.classList.add('correct');
+    });
+    if (drawFeedback) {
+      drawFeedback.className = 'draw-feedback good';
+      drawFeedback.textContent = '✓ ' + (q.explain || '');
+    }
+    if (drawNext) {
+      drawNext.disabled = drawIndex >= DRAW_QS.length - 1;
+      drawNext.textContent = drawIndex >= DRAW_QS.length - 1 ? 'Done' : 'Next →';
+    }
+  }
+
+  if (drawNext) drawNext.addEventListener('click', () => {
+    if (!drawLocked || drawIndex >= DRAW_QS.length - 1) return;
+    drawIndex++;
+    renderDrawQuestion();
+  });
+  if (drawBack) drawBack.addEventListener('click', () => {
+    if (drawIndex <= 0) return;
+    drawIndex--;
+    renderDrawQuestion();
+  });
+  if (drawRestart) drawRestart.addEventListener('click', () => {
+    drawIndex = 0;
+    drawAnswers = new Array(DRAW_QS.length).fill(null);
+    renderDrawQuestion();
+  });
+  renderDrawQuestion();
+
 
 })();
