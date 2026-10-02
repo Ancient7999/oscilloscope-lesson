@@ -597,8 +597,10 @@ body.mode-practical .nav-next {
 }
 .method-panel img {
   display: block; width: 100%; flex: 1;
-  object-fit: cover; min-height: 280px;
-  background: #0f1419;
+  object-fit: contain; object-position: center;
+  min-height: 280px; max-height: 520px;
+  background: #1a2228;
+  padding: 8px;
 }
 .method-panel .panel-cap {
   font-family: var(--sans);

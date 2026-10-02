@@ -233,14 +233,14 @@
 
   /* —— Method step → illustration panel —— */
   const METHOD_STEPS = [
-    { img: 'assets/step-01-power.png', cap: 'Power on the CRO and wait for a stable horizontal trace.' },
-    { img: 'assets/step-02-connect.png', cap: 'Route the function-generator output into a CRO channel (e.g. CH1).' },
-    { img: 'assets/step-03-focus.png', cap: 'Trim Intensity, then Focus, until the line is bright and sharp.' },
-    { img: 'assets/step-04-volts.png', cap: 'Pick a triangular wave and set volts/div so the wave fills the screen cleanly.' },
-    { img: 'assets/step-05-time.png', cap: 'Set time/div until the sweep locks and the wave stands still.' },
-    { img: 'assets/step-06-amplitude.png', cap: 'Count Y (peak-to-peak divisions). Vpp = Y × volts/div; A = Vpp / 2.' },
-    { img: 'assets/step-07-period.png', cap: 'Count X (one full cycle). T = X × time/div; f = 1 / T.' },
-    { img: 'assets/step-08-repeat.png', cap: 'Repeat for square and sinusoidal waves; trace all three in the workbook.' }
+    { img: 'assets/step-01.png', cap: 'Power on the CRO and wait for a stable horizontal trace.' },
+    { img: 'assets/step-02.png', cap: 'Route the function-generator output into a CRO channel (e.g. CH1).' },
+    { img: 'assets/step-03.png', cap: 'Trim Intensity, then Focus, until the line is bright and sharp.' },
+    { img: 'assets/step-04.png', cap: 'Pick a triangular wave and set volts/div so the wave fills the screen cleanly.' },
+    { img: 'assets/step-05.png', cap: 'Set time/div until the sweep locks and the wave stands still.' },
+    { img: 'assets/step-06.png', cap: 'Count Y (peak-to-peak divisions). Vpp = Y × volts/div; A = Vpp / 2.' },
+    { img: 'assets/step-07.png', cap: 'Count X (one full cycle). T = X × time/div; f = 1 / T.' },
+    { img: 'assets/step-08.png', cap: 'Repeat for square and sinusoidal waves; trace all three in the workbook.' }
   ];
 
   const methodSplit = document.getElementById('method-split');
