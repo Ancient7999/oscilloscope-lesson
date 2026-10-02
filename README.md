@@ -1,12 +1,8 @@
-> This README is AI-generated.
+This README is AI-generated.
 
-## Try it live (no setup)
+Open the Oscilloscope Lab Lesson interface.
 
-**[Open the Oscilloscope Lab Lesson on GitHub Pages →](https://ancient7999.github.io/oscilloscope-lesson/)**
-
-Skip cloning, installs, and local servers — just click the link above and use the lesson in your browser.
-
----
+https://ancient7999.github.io/oscilloscope-lesson/
 
 # Oscilloscope — College Lab Lesson
 
