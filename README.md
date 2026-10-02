@@ -1,22 +1,22 @@
-# 6. Oscilloscope — College Lab Lesson
+# Oscilloscope — College Lab Lesson
 
-Static multipage SPA for measuring amplitude, period, and frequency with a CRO. Light-neutral study pages; Practical (last) switches to a livelier live background. Chart-first inspection on the CRO screen. GitHub Pages friendly.
+Static multipage SPA for measuring amplitude, period, and frequency with a CRO.
+Study pages use a soft animated field + characterful dual-ring cursor; Practical (last) switches to scanline / phosphor / waveform beams (not pulsing orbs). Chart-first teaching with live t/V readouts and under-chart formulas.
 
 ## View on GitHub Pages
 
 `https://ancient7999.github.io/oscilloscope-lesson/`
 
-## Page order
+## Section order
 
-1. Aim  
-2. Learning outcomes  
-3. What is an oscilloscope? (alive graticule hover)  
-4. Medical perspectives (ECG / EEG / EMG visuals)  
-5. Method (+ apparatus)  
-6. Formulas  
-7. Results  
-8. Trace waveforms  
-9. Practical (final — free exploration on the chart)
+1. Aim & outcomes (merged)
+2. What is an oscilloscope? (numbered graticule + live t/V)
+3. Medical perspectives (ECG / EEG / EMG)
+4. Method (click a step → illustration panel)
+5. Formulas
+6. Results
+7. Trace waveforms
+8. Practical (final — free hover teaching + under-chart formulas)
 
 ## Local preview
 
@@ -24,7 +24,7 @@ Open `index.html` in a browser (or serve the folder). Assets load via relative p
 
 ## Structure
 
-- `index.html` — hash-routed views + end-of-lesson optional extras  
-- `css/styles.css` — layout, themes, practical  
-- `js/app.js` — navigation, backgrounds, chart inspection  
-- `assets/` — CRO, function generator, EEG, graph paper  
+- `index.html` — hash-routed views + sneaky end extras
+- `css/styles.css` — layout, themes, practical teaching
+- `js/app.js` — navigation, FX, cursor, chart / formula teaching
+- `assets/` — CRO, function generator, EEG, graph paper, method-step illustrations
