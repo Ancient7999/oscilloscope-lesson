@@ -1,11 +1,17 @@
+> This README is AI-generated.
+
+## Try it live (no setup)
+
+**[Open the Oscilloscope Lab Lesson on GitHub Pages →](https://ancient7999.github.io/oscilloscope-lesson/)**
+
+Skip cloning, installs, and local servers — just click the link above and use the lesson in your browser.
+
+---
+
 # Oscilloscope — College Lab Lesson
 
 Static multipage SPA for measuring amplitude, period, and frequency with a CRO.
 Site-wide Practical colorful live theme (scanline / phosphor / waveform beams). Chart-first teaching with live t/V readouts, under-chart formulas, and a guided calc walkthrough (Vpp → A → T → f).
-
-## View on GitHub Pages
-
-`https://ancient7999.github.io/oscilloscope-lesson/`
 
 ## Section order
 
@@ -18,7 +24,7 @@ Site-wide Practical colorful live theme (scanline / phosphor / waveform beams). 
 7. MCQs (scrollable full bank — select / feedback / explanations)
 8. Practical (final — free hover teaching + guided calc + draw-graph stroke MCQ)
 
-## Local preview
+## Local preview (optional)
 
 Open `index.html` in a browser (or serve the folder). Assets load via relative paths.
 MCQs load `data/mcq-bank.json` via `fetch`, so use a local static server if the browser blocks file:// fetches.
