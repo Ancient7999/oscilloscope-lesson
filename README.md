@@ -2,7 +2,7 @@ This README is AI-generated.
 
 Open the Oscilloscope Lab Lesson interface.
 
-https://ancient7999.github.io/oscilloscope-lesson/
+https://sonicunligmated.github.io/oscilloscope-lesson/
 
 # Oscilloscope — College Lab Lesson
 
