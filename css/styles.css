@@ -1571,3 +1571,30 @@ body, button, a, .nav-item, .nav-prev, .nav-next, .method-step,
   cursor: none !important;
 }
 
+
+
+.rail-brand .abbr-expand {
+  cursor: help;
+}
+.rail-brand .abbr-expand .abbr {
+  position: relative;
+}
+.rail-brand .abbr-expand:hover .abbr,
+.rail-brand .abbr-expand:focus-within .abbr {
+  font-size: 0;
+}
+.rail-brand .abbr-expand:hover .abbr::after,
+.rail-brand .abbr-expand:focus-within .abbr::after {
+  content: attr(data-full);
+  font-size: 0.62rem;
+  letter-spacing: 0.01em;
+  color: var(--muted);
+}
+body.mode-practical .rail-brand .abbr-expand:hover .abbr::after,
+body.mode-practical .rail-brand .abbr-expand:focus-within .abbr::after {
+  color: #b8d4c8;
+}
+.rail-brand .abbr-expand:hover .dot,
+.rail-brand .abbr-expand:focus-within .dot {
+  margin: 0 0.15em;
+}
