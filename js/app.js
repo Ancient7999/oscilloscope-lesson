@@ -1,12 +1,12 @@
 (function () {
   'use strict';
 
-  /* —— Animated background —— */
   const canvas = document.getElementById('fxCanvas');
   const ctx = canvas.getContext('2d');
-  let W, H;
+  let W, H, practicalMode = false;
   const wells = [], specks = [];
-  const palette = ['#3d5a80', '#5c7a9e', '#c4a574', '#8aa0b4', '#d4c4a8'];
+  const paletteStudy = ['#3d5a80', '#5c7a9e', '#c4a574', '#8aa0b4'];
+  const paletteLive = ['#7ec8a8', '#d4b06a', '#5ac8aa', '#e8c078', '#6a9ec8', '#c4786a'];
 
   function resize() {
     W = canvas.width = window.innerWidth;
@@ -15,42 +15,58 @@
   window.addEventListener('resize', resize);
   resize();
 
-  for (let i = 0; i < 10; i++) {
-    wells.push({
-      x: Math.random() * W, y: Math.random() * H,
-      r: 40 + Math.random() * 90,
-      a: 0.025 + Math.random() * 0.045,
-      color: palette[Math.floor(Math.random() * palette.length)],
-      pulse: Math.random() * Math.PI * 2,
-      drift: (Math.random() - 0.5) * 0.06
-    });
+  function seedParticles() {
+    wells.length = 0;
+    specks.length = 0;
+    const pal = practicalMode ? paletteLive : paletteStudy;
+    const nW = practicalMode ? 14 : 8;
+    const nS = practicalMode ? 55 : 28;
+    for (let i = 0; i < nW; i++) {
+      wells.push({
+        x: Math.random() * W, y: Math.random() * H,
+        r: (practicalMode ? 50 : 35) + Math.random() * (practicalMode ? 120 : 80),
+        a: (practicalMode ? 0.04 : 0.02) + Math.random() * (practicalMode ? 0.07 : 0.04),
+        color: pal[Math.floor(Math.random() * pal.length)],
+        pulse: Math.random() * Math.PI * 2,
+        drift: (Math.random() - 0.5) * (practicalMode ? 0.14 : 0.05)
+      });
+    }
+    for (let i = 0; i < nS; i++) {
+      specks.push({
+        x: Math.random() * W, y: Math.random() * H,
+        r: 0.8 + Math.random() * (practicalMode ? 2.4 : 1.6),
+        vx: (Math.random() - 0.5) * (practicalMode ? 0.22 : 0.08),
+        vy: (Math.random() - 0.5) * (practicalMode ? 0.18 : 0.06),
+        a: (practicalMode ? 0.2 : 0.1) + Math.random() * 0.25,
+        color: pal[Math.floor(Math.random() * pal.length)]
+      });
+    }
   }
-  for (let i = 0; i < 36; i++) {
-    specks.push({
-      x: Math.random() * W, y: Math.random() * H,
-      r: 0.8 + Math.random() * 1.8,
-      vx: (Math.random() - 0.5) * 0.09,
-      vy: (Math.random() - 0.5) * 0.07,
-      a: 0.12 + Math.random() * 0.2,
-      color: palette[Math.floor(Math.random() * palette.length)]
-    });
-  }
+  seedParticles();
 
   function drawFx() {
     ctx.clearRect(0, 0, W, H);
-    const g = ctx.createRadialGradient(W * 0.2, H * 0.05, 0, W * 0.5, H * 0.55, Math.max(W, H) * 0.9);
-    g.addColorStop(0, 'rgba(255,255,255,0.35)');
-    g.addColorStop(1, 'rgba(235,232,225,0.15)');
-    ctx.fillStyle = g;
-    ctx.fillRect(0, 0, W, H);
+    if (practicalMode) {
+      const g = ctx.createRadialGradient(W * 0.5, H * 0.4, 0, W * 0.5, H * 0.5, Math.max(W, H) * 0.85);
+      g.addColorStop(0, 'rgba(30,50,55,0.5)');
+      g.addColorStop(1, 'rgba(12,18,24,0.2)');
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, W, H);
+    } else {
+      const g = ctx.createRadialGradient(W * 0.2, H * 0.05, 0, W * 0.5, H * 0.55, Math.max(W, H) * 0.9);
+      g.addColorStop(0, 'rgba(255,255,255,0.3)');
+      g.addColorStop(1, 'rgba(235,232,225,0.1)');
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, W, H);
+    }
     wells.forEach(w => {
-      w.x += w.drift; w.pulse += 0.008;
-      if (w.x < -80) w.x = W + 80;
-      if (w.x > W + 80) w.x = -80;
+      w.x += w.drift; w.pulse += practicalMode ? 0.014 : 0.007;
+      if (w.x < -100) w.x = W + 100;
+      if (w.x > W + 100) w.x = -100;
       ctx.beginPath();
-      ctx.arc(w.x, w.y, w.r * (0.9 + 0.1 * Math.sin(w.pulse)), 0, Math.PI * 2);
+      ctx.arc(w.x, w.y, w.r * (0.88 + 0.12 * Math.sin(w.pulse)), 0, Math.PI * 2);
       ctx.fillStyle = w.color;
-      ctx.globalAlpha = w.a * (0.75 + 0.25 * Math.sin(w.pulse));
+      ctx.globalAlpha = w.a * (0.7 + 0.3 * Math.sin(w.pulse));
       ctx.fill();
     });
     specks.forEach(s => {
@@ -68,44 +84,22 @@
   }
   drawFx();
 
-  /* —— Custom cursor —— */
-  const cursor = document.getElementById('cursor');
-  const coreEl = document.querySelector('#cursor.core');
-  let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
-  const coarse = window.matchMedia('(pointer: coarse)').matches;
-
-  if (!coarse) {
-    document.addEventListener('mousemove', e => {
-      mouseX = e.clientX; mouseY = e.clientY;
-      cursor.style.left = mouseX + 'px';
-      cursor.style.top = mouseY + 'px';
-      coreEl.style.left = mouseX + 'px';
-      coreEl.style.top = mouseY + 'px';
-      proximityTick();
-    });
-    document.addEventListener('mousedown', () => cursor.classList.add('active'));
-    document.addEventListener('mouseup', () => cursor.classList.remove('active'));
-  }
-
-  /* —— SPA views —— */
   const VIEWS = [
     { id: 'aim', label: 'Aim' },
+    { id: 'outcomes', label: 'Outcomes' },
     { id: 'basics', label: 'What is a CRO?' },
-    { id: 'medical', label: 'Medical context' },
-    { id: 'outcomes', label: 'Learning outcomes' },
-    { id: 'apparatus', label: 'Apparatus' },
+    { id: 'medical', label: 'Medical' },
     { id: 'method', label: 'Method' },
-    { id: 'practical', label: 'Practical', practical: true },
     { id: 'formulas', label: 'Formulas' },
     { id: 'results', label: 'Results' },
-    { id: 'trace', label: 'Trace chart' }
+    { id: 'trace', label: 'Trace' },
+    { id: 'practical', label: 'Practical', practical: true }
   ];
 
   const nav = document.getElementById('nav');
   const progressFill = document.getElementById('progress-fill');
   const whereEl = document.getElementById('where');
   const btnPrev = document.getElementById('btn-page-prev');
-  const btnNext = document.getElementById('btn-page-next');
   let viewIndex = 0;
   const visited = new Set();
 
@@ -134,15 +128,20 @@
     progressFill.style.width = pct + '%';
     whereEl.innerHTML = '<strong>' + (i + 1) + '</strong> / ' + VIEWS.length + ' · ' + VIEWS[i].label;
     btnPrev.disabled = i === 0;
-    btnNext.disabled = i === VIEWS.length - 1;
-    document.querySelector('.app').classList.toggle('mode-practical', !!VIEWS[i].practical);
+
+    const isPrac = !!VIEWS[i].practical;
+    if (isPrac !== practicalMode) {
+      practicalMode = isPrac;
+      document.body.classList.toggle('mode-practical', isPrac);
+      seedParticles();
+    }
+
     if (pushHash !== false) {
       history.replaceState(null, '', '#' + VIEWS[i].id);
     }
-    if (VIEWS[i].id === 'practical') {
-      setTimeout(() => { if (window.renderMathInElement) tryRenderMath(); }, 50);
-    }
     tryRenderMath();
+    const active = document.querySelector('.view.active');
+    if (active) active.scrollTop = 0;
   }
 
   function tryRenderMath() {
@@ -159,11 +158,8 @@
   }
 
   btnPrev.addEventListener('click', () => goTo(viewIndex - 1));
-  btnNext.addEventListener('click', () => goTo(viewIndex + 1));
-
-  document.getElementById('fs-btn').addEventListener('click', () => {
-    if (!document.fullscreenElement) document.documentElement.requestFullscreen();
-    else document.exitFullscreen();
+  document.querySelectorAll('[data-next]').forEach(btn => {
+    btn.addEventListener('click', () => goTo(viewIndex + 1));
   });
 
   function hashToIndex() {
@@ -175,293 +171,158 @@
   goTo(hashToIndex(), false);
 
   document.addEventListener('keydown', e => {
-    if (e.key === 'f' || e.key === 'F') {
-      if (!document.fullscreenElement) document.documentElement.requestFullscreen();
-      else document.exitFullscreen();
-    }
     if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
     if (e.key === 'ArrowRight') goTo(viewIndex + 1);
     if (e.key === 'ArrowLeft') goTo(viewIndex - 1);
   });
 
-  /* —— Practical steps (hover-first) —— */
-  const steps = [
-    {
-      title: 'Power on the CRO',
-      body: 'Push in the power switch. After a few seconds a horizontal trace appears on the CRT.',
-      hint: 'Hover near the power glow on the screen — it wakes the first cue.',
-      annos: ['power'],
-      knobs: [],
-      hot: 'power'
+  /* Basics chart — alive regions */
+  const REGION_COPY = {
+    vaxis: {
+      title: 'Voltage axis',
+      text: 'Vertical axis. Each square is one division of volts (set by volts/div on the front panel).'
     },
-    {
-      title: 'Connect the function generator',
-      body: 'Connect the function-generator output to one CRO input (typically CH1) with a BNC lead.',
-      hint: 'Hover the CH1 input badge or the CH1 ← FG chip below the screen.',
-      annos: ['power', 'input'],
-      knobs: ['input'],
-      hot: 'input'
+    taxis: {
+      title: 'Time axis',
+      text: 'Horizontal axis. Each square is one division of time (set by time/div).'
     },
-    {
-      title: 'Intensity and Focus',
-      body: 'Adjust Intensity for a readable brightness, then Focus until the trace is a sharp thin line.',
-      hint: 'Hover the INT · FOCUS chip — a blurry trace makes division counting inaccurate.',
-      annos: ['focus'],
-      knobs: ['focus'],
-      hot: 'focus'
+    peak: {
+      title: 'Peak-to-peak',
+      text: 'Distance from the lowest point of the wave to the highest. Count those vertical divisions for Y.'
     },
-    {
-      title: 'Set volts/div (vertical scale)',
-      body: 'Change the volts/division control until the wave fits the screen with a convenient height. Here the setting is 2 V/div.',
-      hint: 'Hover the left VOLTS/DIV strip or the VOLTS/DIV chip.',
-      annos: ['vdiv'],
-      knobs: ['vdiv'],
-      hot: 'vdiv'
+    period: {
+      title: 'One period (T)',
+      text: 'Width of one complete cycle — crest to next matching crest. Count those horizontal divisions for X.'
     },
-    {
-      title: 'Set time/div (horizontal scale)',
-      body: 'Change time/division until one or two cycles fill the screen and the sweep matches so the wave stands still. Here: 1 ms/div.',
-      hint: 'Hover the TIME/DIV bar along the bottom of the CRT.',
-      annos: ['tdiv'],
-      knobs: ['tdiv'],
-      hot: 'tdiv'
-    },
-    {
-      title: 'Count Y divisions (peak-to-peak)',
-      body: 'Count vertical divisions from the lowest point of the wave to the highest. On this screen Y = 3.0 divisions.',
-      hint: 'Hover near the vertical amber bracket on the wave. Vpp = Y × volts/div.',
-      annos: ['ydiv', 'vdiv'],
-      knobs: ['vdiv'],
-      hot: 'ydiv'
-    },
-    {
-      title: 'Count X divisions (one period)',
-      body: 'Count horizontal divisions spanning one complete cycle. Here X = 4.0 divisions.',
-      hint: 'Hover the horizontal bracket under the wave. T = X × time/div.',
-      annos: ['xdiv', 'tdiv'],
-      knobs: ['tdiv'],
-      hot: 'xdiv'
-    },
-    {
-      title: 'Compute Vpp, A, T, and f',
-      body: 'Multiply divisions by the scale settings, then find amplitude and frequency. Fields wake one by one as you hover them — fill gently, minimal clicks.',
-      hint: 'Vpp = 3×2 = 6 V · A = 3 V · T = 4×1 ms = 4 ms · f = 1/0.004 s = 250 Hz.',
-      annos: ['ydiv', 'xdiv', 'calc'],
-      knobs: ['vdiv', 'tdiv'],
-      hot: 'calc'
+    division: {
+      title: 'One division',
+      text: 'A single graticule square. Scale it with volts/div (vertical) or time/div (horizontal).'
     }
-  ];
+  };
+  const explainEl = document.getElementById('basics-explain');
+  const basicsDefault = explainEl ? explainEl.textContent : '';
 
-  let stepIdx = 0;
-  const guideMeta = document.getElementById('guide-meta');
-  const guideTitle = document.getElementById('guide-title');
-  const guideBody = document.getElementById('guide-body');
-  const guideHint = document.getElementById('guide-hint');
-  const whisper = document.getElementById('whisper');
-  const stepDots = document.getElementById('step-dots');
-  const btnStepPrev = document.getElementById('btn-step-prev');
-  const btnStepNext = document.getElementById('btn-step-next');
-  const calcPanel = document.getElementById('calc-panel');
-  const annos = () => document.querySelectorAll('#cro-stage [data-anno]');
-  const knobs = () => document.querySelectorAll('#cro-stage [data-knob]');
-
-  steps.forEach((_, i) => {
-    const b = document.createElement('button');
-    b.type = 'button';
-    b.className = 'step-dot';
-    b.setAttribute('aria-label', 'Step ' + (i + 1));
-    b.addEventListener('click', () => { stepIdx = i; renderStep(); });
-    stepDots.appendChild(b);
-  });
-
-  function renderStep() {
-    const s = steps[stepIdx];
-    guideMeta.textContent = 'Step ' + (stepIdx + 1) + ' of ' + steps.length;
-    guideTitle.textContent = s.title;
-    guideBody.textContent = s.body;
-    guideHint.textContent = s.hint;
-    btnStepPrev.disabled = stepIdx === 0;
-    btnStepNext.textContent = stepIdx === steps.length - 1 ? 'Done' : 'Next →';
-    btnStepNext.disabled = false;
-
-    annos().forEach(el => {
-      const key = el.getAttribute('data-anno');
-      const on = s.annos.indexOf(key) !== -1;
-      el.classList.toggle('on', on);
-      el.classList.toggle('anno-pulse', on && (key === 'ydiv' || key === 'xdiv'));
-      el.classList.remove('soft', 'wake');
-    });
-    knobs().forEach(el => {
-      const key = el.getAttribute('data-knob');
-      el.classList.toggle('active', s.knobs.indexOf(key) !== -1);
-      el.classList.remove('wake');
-    });
-    Array.prototype.forEach.call(stepDots.children, (d, i) => {
-      d.classList.toggle('on', i === stepIdx);
-      d.classList.toggle('done', i < stepIdx);
-      d.classList.remove('wake');
-    });
-
-    const openCalc = stepIdx >= steps.length - 1;
-    calcPanel.classList.toggle('open', openCalc);
-    if (openCalc) {
-      document.querySelectorAll('.calc-field').forEach((f, i) => {
-        setTimeout(() => f.classList.add('awake'), 120 + i * 140);
+  document.querySelectorAll('#basics-chart .region-hit').forEach(hit => {
+    const key = hit.getAttribute('data-region');
+    hit.addEventListener('mouseenter', () => {
+      document.querySelectorAll('#basics-chart .region-mark').forEach(m => {
+        m.classList.toggle('on', m.getAttribute('data-mark') === key);
       });
-    } else {
-      document.querySelectorAll('.calc-field').forEach(f => f.classList.remove('awake'));
-    }
-  }
-
-  btnStepPrev.addEventListener('click', () => { if (stepIdx > 0) { stepIdx--; renderStep(); } });
-  btnStepNext.addEventListener('click', () => {
-    if (stepIdx < steps.length - 1) { stepIdx++; renderStep(); }
+      const c = REGION_COPY[key];
+      if (c && explainEl) {
+        explainEl.innerHTML = '<strong>' + c.title + '</strong> — ' + c.text;
+      }
+    });
+    hit.addEventListener('mouseleave', () => {
+      document.querySelectorAll('#basics-chart .region-mark').forEach(m => m.classList.remove('on'));
+      if (explainEl) explainEl.textContent = basicsDefault;
+    });
   });
 
-  /* Proximity / hover wake system */
-  const HOT_TO_STEP = {
-    power: 0, input: 1, focus: 2, vdiv: 3, tdiv: 4, ydiv: 5, xdiv: 6, calc: 7
+  /* Practical — chart-first inspection */
+  const INSPECT = {
+    vdiv: {
+      title: 'Volts / div',
+      body: 'Vertical scale for this worked example.',
+      formula: 'volts/div = 2 V/div',
+      mark: 'vdiv',
+      highlightField: 'vpp'
+    },
+    tdiv: {
+      title: 'Time / div',
+      body: 'Horizontal scale for this worked example.',
+      formula: 'time/div = 1 ms/div',
+      mark: 'tdiv',
+      highlightField: 'tms'
+    },
+    ydiv: {
+      title: 'Y divisions (peak-to-peak)',
+      body: 'Count vertical squares from trough to crest.',
+      formula: 'Y = 3.0 div → Vpp = 3.0 × 2 = 6.0 V',
+      mark: 'ydiv',
+      highlightField: 'vpp'
+    },
+    xdiv: {
+      title: 'X divisions (one period)',
+      body: 'Count horizontal squares spanning one full cycle.',
+      formula: 'X = 4.0 div → T = 4.0 × 1 ms = 4.0 ms',
+      mark: 'xdiv',
+      highlightField: 'tms'
+    },
+    peak: {
+      title: 'Peak',
+      body: 'Highest (or lowest) point of the trace. Peak-to-peak spans both extremes.',
+      formula: 'A = Vpp / 2 = 3.0 V',
+      mark: 'peak',
+      highlightField: 'a'
+    },
+    wave: {
+      title: 'Waveform',
+      body: 'Voltage versus time. Use Y for amplitude and X for period.',
+      formula: 'f = 1/T = 1 / 0.004 s = 250 Hz',
+      mark: 'wave',
+      highlightField: 'f'
+    },
+    calc: {
+      title: 'Worked values',
+      body: 'All four results from the counts and scales on this screen.',
+      formula: 'Vpp 6 V · A 3 V · T 4 ms · f 250 Hz',
+      mark: 'calc',
+      highlightField: null
+    }
   };
 
-  function setWhisper(text, live) {
-    whisper.textContent = text;
-    whisper.classList.toggle('live', !!live);
+  const vrTitle = document.getElementById('vr-title');
+  const vrBody = document.getElementById('vr-body');
+  const vrFormula = document.getElementById('vr-formula');
+  const bubble = document.getElementById('inspect-bubble');
+
+  function clearInspect() {
+    document.querySelectorAll('#cro-stage .inspect-mark').forEach(m => m.classList.remove('on'));
+    document.querySelectorAll('.calc-field').forEach(f => f.classList.remove('awake'));
+    if (vrTitle) vrTitle.textContent = 'CRO screen';
+    if (vrBody) vrBody.textContent = 'Move over the wave, peaks, Y/X brackets, volts/div or time/div knobs on the display.';
+    if (vrFormula) vrFormula.textContent = '';
+    if (bubble) bubble.hidden = true;
   }
 
-  function wakeHot(key) {
-    const target = HOT_TO_STEP[key];
-    if (typeof target !== 'number') return;
-
-    // Soft preview of related annotations even before committing the step
-    annos().forEach(el => {
-      const k = el.getAttribute('data-anno');
-      if (k === key || (steps[target].annos.indexOf(k) !== -1 && target === stepIdx)) {
-        el.classList.add('wake');
-        if (!el.classList.contains('on')) el.classList.add('soft');
-      }
+  function showInspect(key, clientX, clientY) {
+    const info = INSPECT[key];
+    if (!info) return;
+    document.querySelectorAll('#cro-stage .inspect-mark').forEach(m => {
+      m.classList.toggle('on', m.getAttribute('data-mark') === info.mark);
     });
-    knobs().forEach(el => {
-      if (el.getAttribute('data-knob') === key) el.classList.add('wake');
+    if (vrTitle) vrTitle.textContent = info.title;
+    if (vrBody) vrBody.textContent = info.body;
+    if (vrFormula) vrFormula.textContent = info.formula;
+    document.querySelectorAll('.calc-field').forEach(f => {
+      f.classList.toggle('awake', info.highlightField && f.getAttribute('data-key') === info.highlightField);
     });
-    if (stepDots.children[target]) stepDots.children[target].classList.add('wake');
-
-    const nextHint = steps[target].title;
-    if (target === stepIdx) {
-      setWhisper('Here · ' + nextHint + ' — linger, then click the zone or press Next when ready.', true);
-    } else if (target === stepIdx + 1) {
-      setWhisper('Nearby · next is “' + nextHint + '”. Hover a moment longer or click to step forward.', true);
-      cursor.classList.add('near');
-    } else if (target > stepIdx + 1) {
-      setWhisper('Looking ahead · “' + nextHint + '” comes later. Finish the current step first, or jump via the dots.', true);
-    } else {
-      setWhisper('Backtrack · revisit “' + nextHint + '” anytime.', true);
+    if (bubble) {
+      bubble.hidden = false;
+      bubble.textContent = info.title + ' · ' + info.formula;
+      const stage = document.getElementById('cro-stage');
+      const r = stage.getBoundingClientRect();
+      let x = clientX - r.left + 14;
+      let y = clientY - r.top - 40;
+      if (x + 200 > r.width) x = clientX - r.left - 210;
+      if (y < 8) y = clientY - r.top + 18;
+      bubble.style.left = x + 'px';
+      bubble.style.top = y + 'px';
     }
   }
 
-  function clearWake() {
-    annos().forEach(el => el.classList.remove('wake', 'soft'));
-    knobs().forEach(el => el.classList.remove('wake'));
-    Array.prototype.forEach.call(stepDots.children, d => d.classList.remove('wake'));
-    document.querySelectorAll('.hotspot-hit').forEach(h => h.classList.remove('near'));
-    cursor.classList.remove('near');
-    if (VIEWS[viewIndex] && VIEWS[viewIndex].id === 'practical') {
-      setWhisper('Hover the screen, knobs, or brackets — they wake and gently show what’s next. Few clicks needed.', false);
-    }
+  const croStage = document.getElementById('cro-stage');
+  if (croStage) {
+    croStage.addEventListener('mousemove', e => {
+      const hit = e.target.closest('[data-inspect]');
+      if (hit) showInspect(hit.getAttribute('data-inspect'), e.clientX, e.clientY);
+      else clearInspect();
+    });
+    croStage.addEventListener('mouseleave', clearInspect);
   }
 
-  function proximityTick() {
-    if (!VIEWS[viewIndex] || VIEWS[viewIndex].id !== 'practical') return;
-    const stage = document.getElementById('cro-stage');
-    if (!stage) return;
-
-    let nearest = null;
-    let best = 72;
-
-    document.querySelectorAll('[data-hot]').forEach(el => {
-      const r = el.getBoundingClientRect();
-      if (r.width === 0) return;
-      const cx = r.left + r.width / 2;
-      const cy = r.top + r.height / 2;
-      const dx = mouseX - cx, dy = mouseY - cy;
-      const d = Math.sqrt(dx * dx + dy * dy);
-      const pad = Math.max(r.width, r.height) * 0.55 + 36;
-      if (d < pad && d < best) {
-        best = d;
-        nearest = el.getAttribute('data-hot');
-        if (el.classList.contains('hotspot-hit')) el.classList.add('near');
-      } else if (el.classList.contains('hotspot-hit')) {
-        el.classList.remove('near');
-      }
-    });
-
-    // Also check SVG hotspot centers via getScreenCTM if present
-    document.querySelectorAll('#cro-stage .hotspot-hit').forEach(h => {
-      try {
-        const bb = h.getBoundingClientRect();
-        const cx = bb.left + bb.width / 2;
-        const cy = bb.top + bb.height / 2;
-        const d = Math.hypot(mouseX - cx, mouseY - cy);
-        const pad = Math.max(bb.width, bb.height) * 0.6 + 40;
-        if (d < pad && d < best) {
-          best = d;
-          nearest = h.getAttribute('data-hot') || HOT_KEY_FROM_GOTO(h);
-          h.classList.add('near');
-        }
-      } catch (e) { /* ignore */ }
-    });
-
-    if (nearest) wakeHot(nearest);
-    else clearWake();
-  }
-
-  function HOT_KEY_FROM_GOTO(h) {
-    const g = parseInt(h.getAttribute('data-goto'), 10);
-    const map = { 0: 'power', 1: 'input', 2: 'focus', 3: 'vdiv', 4: 'tdiv', 5: 'ydiv', 6: 'xdiv', 7: 'calc' };
-    return map[g] || null;
-  }
-
-  // Commit on click of hotspot / knob — low resistance advance
-  document.getElementById('cro-stage').addEventListener('click', e => {
-    const hotEl = e.target.closest('[data-hot]');
-    const hit = e.target.closest('.hotspot-hit');
-    let key = hotEl ? hotEl.getAttribute('data-hot') : null;
-    if (!key && hit) key = HOT_KEY_FROM_GOTO(hit);
-    if (!key) return;
-    const target = HOT_TO_STEP[key];
-    if (typeof target === 'number') {
-      // Allow jump to current, next, or any earlier; soft-gate far jumps
-      if (target <= stepIdx + 1 || target <= stepIdx) {
-        stepIdx = target;
-        renderStep();
-      } else {
-        setWhisper('Almost — finish “' + steps[stepIdx].title + '” first, or use Next.', true);
-      }
-    }
-  });
-
-  knobs().forEach(el => {
-    el.addEventListener('mouseenter', () => wakeHot(el.getAttribute('data-knob')));
-    el.addEventListener('mouseleave', () => clearWake());
-    el.addEventListener('click', () => {
-      const key = el.getAttribute('data-knob');
-      const target = HOT_TO_STEP[key];
-      if (typeof target === 'number' && target <= stepIdx + 1) {
-        stepIdx = target; renderStep();
-      }
-    });
-  });
-
-  // Calc field hover wake
-  document.querySelectorAll('.calc-field').forEach(f => {
-    f.addEventListener('mouseenter', () => {
-      if (calcPanel.classList.contains('open')) f.classList.add('awake');
-    });
-  });
-
-  renderStep();
-  setWhisper('Hover the screen, knobs, or brackets — they wake and gently show what’s next. Few clicks needed.', false);
-
-  /* —— Answer checking —— */
+  /* Answer checking — always available */
   const answers = {
     vpp: { value: 6, tol: 0.15 },
     a: { value: 3, tol: 0.15 },
@@ -487,24 +348,22 @@
     const fb = document.getElementById('fb-calc');
     if (ok === total) {
       fb.className = 'calc-feedback ok';
-      fb.textContent = 'All four match (Vpp = 6 V, A = 3 V, T = 4 ms, f = 250 Hz).';
+      fb.textContent = 'Match · Vpp = 6 V, A = 3 V, T = 4 ms, f = 250 Hz.';
     } else {
       fb.className = 'calc-feedback bad';
-      fb.textContent = ok + ' of ' + total + ' correct. Re-count Y and X, then × 2 V/div and 1 ms/div.';
+      fb.textContent = ok + ' of ' + total + ' correct.';
     }
   }
-  document.getElementById('btn-check').addEventListener('click', check);
-  document.getElementById('btn-reveal').addEventListener('click', () => {
+  const btnCheck = document.getElementById('btn-check');
+  const btnReveal = document.getElementById('btn-reveal');
+  if (btnCheck) btnCheck.addEventListener('click', check);
+  if (btnReveal) btnReveal.addEventListener('click', () => {
     document.getElementById('in-vpp').value = '6';
     document.getElementById('in-a').value = '3';
     document.getElementById('in-tms').value = '4';
     document.getElementById('in-f').value = '250';
     check();
-    stepIdx = steps.length - 1;
-    renderStep();
   });
-
-  // Auto-check on blur lightly
   document.querySelectorAll('#calc-panel input').forEach(inp => {
     inp.addEventListener('change', () => {
       const filled = [...document.querySelectorAll('#calc-panel input')].filter(i => i.value !== '').length;
@@ -512,20 +371,20 @@
     });
   });
 
-  /* —— Chart handwriting toggle —— */
+  /* Chart handwriting toggle */
   const chartCanvas = document.getElementById('chart-canvas');
   const btnOn = document.getElementById('btn-hand-on');
   const btnOff = document.getElementById('btn-hand-off');
   function setHand(show) {
+    if (!chartCanvas) return;
     chartCanvas.classList.toggle('hand-hidden', !show);
     btnOn.setAttribute('aria-pressed', show ? 'true' : 'false');
     btnOff.setAttribute('aria-pressed', show ? 'false' : 'true');
   }
-  btnOn.addEventListener('click', () => setHand(true));
-  btnOff.addEventListener('click', () => setHand(false));
+  if (btnOn) btnOn.addEventListener('click', () => setHand(true));
+  if (btnOff) btnOff.addEventListener('click', () => setHand(false));
 
-
-  /* —— End extras upward expand (last page only, not in nav) —— */
+  /* Optional extras */
   const extras = document.getElementById('end-extras');
   const extrasToggle = document.getElementById('end-extras-toggle');
   if (extras && extrasToggle) {
