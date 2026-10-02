@@ -1191,3 +1191,13 @@ body.mode-practical .katex { color: #e8f0f2; }
 /* Trace: example traces always visible — no blank-paper toggle */
 .chart-toggle { display: none !important; }
 .chart-canvas.hand-hidden .hand-layer { opacity: 1; }
+
+
+.ai-disclaimer {
+  font-size: 0.78rem;
+  font-style: italic;
+  color: var(--muted, #8a94a0);
+  line-height: 1.45;
+  margin: 0 0 1rem;
+  max-width: 42rem;
+}
