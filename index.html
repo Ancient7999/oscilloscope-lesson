@@ -354,9 +354,9 @@
               <svg class="hand-layer" viewBox="0 0 803 1141" xmlns="http://www.w3.org/2000/svg" aria-label="Handwritten example traces">
                 <style>
                   .hw { font-family: Caveat, cursive; fill: #1a2744; }
-                  .hw-title { font-size: 42px; font-weight: 700; }
-                  .hw-label { font-size: 28px; font-weight: 600; }
-                  .hw-note { font-size: 24px; font-weight: 500; }
+                  .hw-title { font-size: 48px; font-weight: 700; }
+                  .hw-label { font-size: 30px; font-weight: 600; }
+                  .hw-note { font-size: 28px; font-weight: 500; }
                   .ink { fill: none; stroke: #1a2744; stroke-linecap: round; stroke-linejoin: round; }
                   .ink-blue { stroke: #1e3a8a; }
                   .ink-red { stroke: #7f1d1d; }
@@ -368,22 +368,25 @@
                   <text class="hw hw-label" x="70" y="168" transform="rotate(-0.5 70 168)">1) Triangular</text>
                   <path class="ink" stroke-width="1.8" d="M90 320 C92 318, 94 200, 95 190"/>
                   <path class="ink" stroke-width="1.8" d="M90 320 C200 322, 520 318, 620 321"/>
-                  <text class="hw hw-note" x="55" y="210" transform="rotate(-90 55 210)">V</text>
-                  <text class="hw hw-note" x="600" y="345">t →</text>
+                  <text class="hw hw-note" x="42" y="205">V</text>
+                  <text class="hw hw-note" x="34" y="232">(Y)</text>
+                  <text class="hw hw-note" x="560" y="352">t (X) →</text>
                   <path class="ink ink-blue" stroke-width="2.4"
                     d="M110 320 L160 230 L210 320 L262 228 L310 322 L360 232 L412 318 L462 230 L512 321 L560 235 L610 320"/>
                   <text class="hw hw-label" x="70" y="420" transform="rotate(-0.6 70 420)">2) Square</text>
                   <path class="ink" stroke-width="1.8" d="M90 570 C91 568, 93 450, 94 440"/>
                   <path class="ink" stroke-width="1.8" d="M90 570 C220 572, 500 568, 620 571"/>
-                  <text class="hw hw-note" x="55" y="460" transform="rotate(-90 55 460)">V</text>
-                  <text class="hw hw-note" x="600" y="595">t →</text>
+                  <text class="hw hw-note" x="42" y="455">V</text>
+                  <text class="hw hw-note" x="34" y="482">(Y)</text>
+                  <text class="hw hw-note" x="560" y="602">t (X) →</text>
                   <path class="ink ink-red" stroke-width="2.4"
                     d="M110 570 L112 455 L185 453 L188 568 L258 570 L260 452 L335 454 L338 572 L410 570 L412 455 L485 453 L488 568 L560 570 L562 456 L610 455 L612 570"/>
                   <text class="hw hw-label" x="70" y="670" transform="rotate(-0.4 70 670)">3) Sinusoidal</text>
                   <path class="ink" stroke-width="1.8" d="M90 820 C91 818, 93 700, 95 690"/>
                   <path class="ink" stroke-width="1.8" d="M90 820 C240 822, 510 818, 620 821"/>
-                  <text class="hw hw-note" x="55" y="710" transform="rotate(-90 55 710)">V</text>
-                  <text class="hw hw-note" x="600" y="845">t →</text>
+                  <text class="hw hw-note" x="42" y="705">V</text>
+                  <text class="hw hw-note" x="34" y="732">(Y)</text>
+                  <text class="hw hw-note" x="560" y="852">t (X) →</text>
                   <path class="ink ink-green" stroke-width="2.5"
                     d="M110 820 C135 760, 155 760, 175 760 C195 760, 215 760, 235 820 C255 880, 275 880, 295 880 C315 880, 335 880, 355 820 C375 758, 395 762, 415 760 C435 758, 455 762, 475 820 C495 878, 515 882, 535 880 C555 878, 575 860, 610 820"/>
                   <path class="ink" stroke-width="1.4" stroke-dasharray="3 4" d="M175 760 L175 880"/>
@@ -628,22 +631,24 @@
           <div class="draw-layout">
             <div class="draw-canvas-wrap">
               <img class="draw-paper" src="assets/graph-paper.png" alt="Blank laboratory graph paper" width="803" height="1141" loading="lazy">
-              <svg class="draw-layer" id="draw-layer" viewBox="0 0 803 1141" xmlns="http://www.w3.org/2000/svg" aria-label="Progressive waveform strokes">
+              <svg class="draw-layer" id="draw-layer" viewBox="0 0 803 520" preserveAspectRatio="xMidYMin meet" xmlns="http://www.w3.org/2000/svg" aria-label="Progressive waveform strokes">
                 <style>
                   .dw { font-family: Caveat, cursive; fill: #1a2744; }
-                  .dw-title { font-size: 36px; font-weight: 700; }
-                  .dw-note { font-size: 22px; }
-                  .dink { fill: none; stroke: #1e3a8a; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
-                  .dink-axes { stroke: #1a2744; stroke-width: 1.8; }
+                  .dw-title { font-size: 50px; font-weight: 700; }
+                  .dw-note { font-size: 30px; }
+                  .dw-axis { font-size: 32px; font-weight: 600; }
+                  .dink { fill: none; stroke: #1e3a8a; stroke-width: 2.8; stroke-linecap: round; stroke-linejoin: round; }
+                  .dink-axes { stroke: #1a2744; stroke-width: 2.2; }
                   .dink-ghost { stroke: #94a3b8; stroke-width: 2; stroke-dasharray: 6 5; opacity: 0.55; }
                 </style>
                 <text class="dw dw-title" x="70" y="78" transform="rotate(-1.2 70 78)">Build the triangular trace</text>
-                <text class="dw dw-note" x="70" y="112">volts/div = 2 V/div · time/div = 1 ms/div</text>
+                <text class="dw dw-note" x="70" y="118">volts/div = 2 V/div · time/div = 1 ms/div</text>
                 <g id="draw-axes">
                   <path class="dink dink-axes" d="M90 320 C92 318, 94 200, 95 190"/>
                   <path class="dink dink-axes" d="M90 320 C200 322, 520 318, 620 321"/>
-                  <text class="dw dw-note" x="55" y="210" transform="rotate(-90 55 210)">V</text>
-                  <text class="dw dw-note" x="600" y="345">t →</text>
+                  <text class="dw dw-axis" x="42" y="205">V</text>
+                  <text class="dw dw-axis" x="34" y="238">(Y)</text>
+                  <text class="dw dw-axis" x="560" y="358">t (X) →</text>
                 </g>
                 <g id="draw-committed"></g>
                 <g id="draw-preview"></g>
