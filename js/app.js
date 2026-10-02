@@ -241,7 +241,7 @@
       imgB: 'assets/step-03-after.png',
       labelA: 'Before',
       labelB: 'After',
-      cap: 'Trim Intensity, then Focus, until the line is bright and sharp. Left: dim blurry trace. Right: bright sharp sine after intensity & focus.'
+      cap: 'Trim Intensity, then Focus, until the line is bright and sharp.'
     },
     { img: 'assets/step-04.png', cap: 'Pick a triangular wave and set volts/div so the wave fills the screen cleanly.' },
     { img: 'assets/step-05.png', cap: 'Set time/div until the sweep locks and the wave stands still.' },
@@ -277,12 +277,12 @@
         methodImgB.src = step.imgB;
         methodImgB.alt = step.labelB ? (step.labelB + ' — ' + step.cap) : step.cap;
         if (methodLabelA) {
-          methodLabelA.hidden = false;
-          methodLabelA.textContent = step.labelA || 'Before';
+          methodLabelA.hidden = true;
+          methodLabelA.textContent = '';
         }
         if (methodLabelB) {
-          methodLabelB.hidden = false;
-          methodLabelB.textContent = step.labelB || 'After';
+          methodLabelB.hidden = true;
+          methodLabelB.textContent = '';
         }
       } else {
         if (methodImgB) methodImgB.removeAttribute('src');
