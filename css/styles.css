@@ -852,6 +852,7 @@ body.mode-practical .nav-next {
 .end-extras {
   margin-top: 20px;
   position: relative;
+  z-index: 8;
   text-align: center;
   padding-bottom: 8px;
 }
@@ -878,6 +879,7 @@ body.mode-practical .nav-next {
 }
 .end-extras-panel {
   position: absolute;
+  z-index: 8;
   left: 50%; bottom: 100%;
   transform: translateX(-50%) translateY(8px);
   width: min(420px, 92vw);
@@ -1421,7 +1423,7 @@ body.mode-practical .med-points li strong {
 /* —— Practical draw-graph MCQ —— */
 .draw-mcq {
   position: relative;
-  z-index: 1;
+  z-index: 0;
   clear: both;
   margin: 40px 0 20px;
   padding: 28px 28px 24px;
